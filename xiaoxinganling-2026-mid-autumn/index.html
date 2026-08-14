@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#173f32">
+    <title>中秋小兴安岭 · 五花山自驾攻略</title>
+    <link rel="stylesheet" href="./vendor/leaflet/leaflet.css">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="guide-panel" aria-label="小兴安岭旅行攻略">
+        <header class="hero">
+          <a class="back-link" href="../">← 全部攻略</a>
+          <p class="eyebrow">Xiaoxing'an Mountains · Autumn Road Trip</p>
+          <h1>中秋小兴安岭</h1>
+          <p class="summary">从哈尔滨切入五花山腹地，沿伊春、汤旺、嘉荫一路向东，在红松林、湿地与 G331 界江公路之间追一场北国早秋。</p>
+          <div class="stats"><span><strong>5</strong> 天</span><span><strong>4</strong> 晚</span><span><strong>2</strong> 天请假</span><span><strong>单向</strong> 自驾</span></div>
+          <div id="flightSummary" class="flight-summary"></div>
+        </header>
+
+        <nav class="tabs" aria-label="攻略导航">
+          <button class="tab-button active" data-view="overview">总览</button>
+          <button class="tab-button" data-view="plan">日程</button>
+          <button class="tab-button" data-view="lodging">住宿</button>
+          <button class="tab-button" data-view="spots">景点</button>
+          <button class="tab-button" data-view="driving">自驾</button>
+          <button class="tab-button" data-view="prep">准备</button>
+        </nav>
+
+        <section class="view active" id="overview">
+          <h2>路线节奏</h2>
+          <div class="route-flow" id="routeFlow"></div>
+          <h2>先看这四件事</h2>
+          <div class="tips-grid">
+            <article><span>01</span><h3>9/23 是长途日</h3><p>落地睡一晚后取车，哈尔滨到伊春中途穿插环廊、乌带与宝宇，景点要按天色做减法。</p></article>
+            <article><span>02</span><h3>主景区要早进</h3><p>五营与汤旺河都有观光车衔接，上午入园更容易避开人流，也给傍晚公路秋色留时间。</p></article>
+            <article><span>03</span><h3>G331 不贪停</h3><p>嘉荫到佳木斯还要赶晚班机，萝北段以观景停车点为主，严格设置最晚离开时间。</p></article>
+            <article><span>04</span><h3>异地还车先锁定</h3><p>哈尔滨取车、佳木斯还车涉及门店与费用，订车前确认异地还车、轮胎和保险范围。</p></article>
+          </div>
+          <aside class="notice"><strong>行程年份</strong><p>根据文档时间与 2026 年中秋日期，攻略按 2026 年 9 月 22–26 日整理；若机票实际年份不同，修改数据即可。</p></aside>
+        </section>
+
+        <section class="view" id="plan"><h2>每日安排</h2><div id="dayList" class="day-list"></div></section>
+        <section class="view" id="lodging"><h2>住宿落点</h2><p class="section-note">酒店名称来自原文预订截图；订单截图与预订隐私不公开。点击卡片可在地图定位住宿城市。</p><div id="lodgingList" class="lodging-list"></div></section>
+        <section class="view" id="spots"><h2>重点景点</h2><div id="spotList" class="spot-list"></div></section>
+        <section class="view" id="driving"><h2>自驾公路</h2><div id="drivingList" class="driving-list"></div></section>
+        <section class="view" id="prep"><h2>出发前检查</h2><div id="prepList" class="prep-list"></div></section>
+      </section>
+
+      <section class="map-panel" aria-label="交互地图">
+        <div id="map"></div>
+        <div class="map-toolbar">
+          <button id="fitRouteButton" type="button">显示全程</button>
+          <button id="loadRoutesButton" type="button">加载驾车路线</button>
+          <button id="toggleLodgingButton" type="button" aria-pressed="true">住宿点</button>
+          <button id="toggleSpotsButton" type="button" aria-pressed="true">景点</button>
+        </div>
+        <div id="mapLegend" class="map-legend"></div>
+        <div id="mapStatus" class="map-status">拓扑底图 · 虚线为离线备用路线</div>
+      </section>
+    </main>
+    <script src="./vendor/leaflet/leaflet.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
