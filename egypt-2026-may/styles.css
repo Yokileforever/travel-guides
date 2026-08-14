@@ -1,0 +1,721 @@
+:root {
+  color-scheme: light;
+  --ink: #20211f;
+  --muted: #686f67;
+  --line: #d9ded4;
+  --paper: #f8faf4;
+  --panel: #ffffff;
+  --green: #2f6f54;
+  --blue: #246b8f;
+  --coral: #bb5a43;
+  --gold: #aa7a22;
+  --shadow: 0 18px 45px rgba(38, 45, 37, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button {
+  font: inherit;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: minmax(420px, 42vw) 1fr;
+  min-height: 100vh;
+}
+
+.guide-panel {
+  height: 100vh;
+  overflow: auto;
+  padding: 28px;
+  background: linear-gradient(180deg, #fbfcf7 0%, #eff4ed 100%);
+  border-right: 1px solid var(--line);
+}
+
+.hero {
+  padding: 4px 0 24px;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  max-width: 680px;
+  margin-bottom: 14px;
+  font-size: clamp(36px, 5vw, 58px);
+  line-height: 1.02;
+  letter-spacing: 0;
+}
+
+h2 {
+  margin: 26px 0 14px;
+  font-size: 22px;
+}
+
+h3 {
+  margin-bottom: 8px;
+  font-size: 17px;
+}
+
+.summary {
+  max-width: 760px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.stats span,
+.tabs,
+.map-toolbar,
+.map-legend,
+.map-status {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: var(--shadow);
+}
+
+.stats span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  min-height: 42px;
+  padding: 8px 13px;
+  border-radius: 8px;
+  color: var(--muted);
+}
+
+.stats strong {
+  color: var(--green);
+  font-size: 22px;
+}
+
+.flight-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.flight-card {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(239, 246, 239, 0.9)),
+    var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.flight-card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: start;
+}
+
+.flight-kicker {
+  margin-bottom: 4px;
+  color: var(--coral);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.flight-card h3 {
+  margin-bottom: 4px;
+}
+
+.flight-number {
+  flex: 0 0 auto;
+  padding: 6px 9px;
+  border-radius: 999px;
+  color: white;
+  background: var(--blue);
+  font-size: 12px;
+  font-weight: 820;
+  white-space: nowrap;
+}
+
+.flight-route {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 74px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+}
+
+.airport {
+  display: grid;
+  gap: 4px;
+}
+
+.airport strong {
+  color: var(--green);
+  font-size: 32px;
+  line-height: 1;
+}
+
+.airport span {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 760;
+}
+
+.airport em {
+  color: var(--muted);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 680;
+}
+
+.airport-arrival {
+  text-align: right;
+}
+
+.flight-line {
+  position: relative;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, #9ab1a4 0 7px, transparent 7px 12px);
+}
+
+.flight-line::before,
+.flight-line::after {
+  position: absolute;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border: 2px solid var(--green);
+  border-radius: 50%;
+  background: white;
+  content: "";
+  transform: translateY(-50%);
+}
+
+.flight-line::before {
+  left: -2px;
+}
+
+.flight-line::after {
+  right: -2px;
+}
+
+.flight-line span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 22px;
+  height: 22px;
+  border: 2px solid white;
+  border-radius: 50%;
+  background: var(--coral);
+  box-shadow: 0 2px 8px rgba(38, 45, 37, 0.18);
+  transform: translate(-50%, -50%);
+}
+
+.flight-line span::before {
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  color: white;
+  content: "✈";
+  font-size: 12px;
+}
+
+.flight-detail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.flight-detail span {
+  padding: 5px 8px;
+  border-radius: 999px;
+  color: #315b49;
+  background: #edf3e8;
+  font-size: 12px;
+  font-weight: 720;
+}
+
+.flight-note {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.tabs {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  padding: 5px;
+  border-radius: 8px;
+  backdrop-filter: blur(18px);
+}
+
+.tab-button {
+  min-height: 38px;
+  border: 0;
+  border-radius: 6px;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+}
+
+.tab-button.active {
+  color: white;
+  background: var(--green);
+}
+
+.view {
+  display: none;
+  padding-bottom: 36px;
+}
+
+.view.active {
+  display: block;
+}
+
+.route-flow {
+  display: grid;
+  gap: 8px;
+}
+
+.flow-item,
+.day-card,
+.spot-card,
+.prep-group,
+.tips-grid article {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+.flow-item {
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  gap: 14px;
+  padding: 12px;
+}
+
+.flow-date {
+  color: var(--coral);
+  font-weight: 800;
+}
+
+.flow-title {
+  font-weight: 760;
+}
+
+.flow-detail {
+  margin-top: 4px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.tips-grid,
+.spot-list,
+.prep-list {
+  display: grid;
+  gap: 12px;
+}
+
+.tips-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.tips-grid article,
+.spot-card,
+.prep-group {
+  padding: 15px;
+}
+
+.tips-grid p,
+.spot-card p,
+.day-card p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.day-list {
+  display: grid;
+  gap: 12px;
+}
+
+.day-card {
+  position: relative;
+  padding: 16px;
+  cursor: pointer;
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.day-card:hover,
+.day-card.active {
+  border-color: var(--green);
+  transform: translateY(-1px);
+}
+
+.day-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+
+.day-date {
+  color: var(--coral);
+  font-weight: 800;
+}
+
+.drive-pill {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  max-width: 108px;
+  min-height: 26px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  color: #ffffff;
+  background: var(--blue);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+  white-space: normal;
+}
+
+.day-card h3,
+.day-card p {
+  padding-right: 122px;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.tag {
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #edf3e8;
+  color: #3c604d;
+  font-size: 12px;
+}
+
+.spot-card {
+  display: grid;
+  gap: 8px;
+}
+
+.spot-meta {
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.spot-images {
+  display: grid;
+  grid-auto-columns: minmax(142px, 46%);
+  grid-auto-flow: column;
+  gap: 8px;
+  min-height: 116px;
+  margin: -3px -3px 4px;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  padding: 3px 3px 8px;
+  scroll-snap-type: x proximity;
+}
+
+.spot-images img {
+  width: 100%;
+  height: 116px;
+  border-radius: 7px;
+  background: #e8ece5;
+  object-fit: cover;
+  scroll-snap-align: start;
+}
+
+.prep-group h3 {
+  margin-bottom: 10px;
+}
+
+.check-list {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.check-list li {
+  display: flex;
+  gap: 9px;
+  color: var(--muted);
+}
+
+.check {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  border-radius: 5px;
+  border: 1px solid var(--line);
+  text-align: center;
+  color: white;
+  background: white;
+  font-size: 12px;
+  line-height: 17px;
+}
+
+.done .check {
+  border-color: var(--green);
+  background: var(--green);
+}
+
+.map-panel {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+  background: #d8e4e7;
+}
+
+.map-toolbar {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 500;
+  display: flex;
+  gap: 8px;
+  padding: 7px;
+  border-radius: 8px;
+}
+
+.map-toolbar button {
+  min-height: 36px;
+  border: 0;
+  border-radius: 6px;
+  padding: 0 12px;
+  color: white;
+  background: var(--green);
+  cursor: pointer;
+  font-weight: 720;
+}
+
+.map-toolbar button + button {
+  background: var(--blue);
+}
+
+.map-legend {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 500;
+  display: grid;
+  width: min(310px, calc(100% - 36px));
+  max-height: calc(100% - 132px);
+  overflow: auto;
+  padding: 8px;
+  border-radius: 8px;
+  backdrop-filter: blur(16px);
+}
+
+.legend-title {
+  padding: 5px 6px 8px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 760;
+}
+
+.legend-item {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 8px;
+  align-items: center;
+  min-height: 38px;
+  border: 0;
+  border-radius: 6px;
+  padding: 5px 6px;
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.legend-item:hover,
+.legend-item.active {
+  background: #edf3e8;
+}
+
+.legend-date {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 26px;
+  border-radius: 999px;
+  color: white;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.legend-route {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.route-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  min-height: 24px;
+  border: 2px solid white;
+  border-radius: 999px;
+  color: white;
+  box-shadow: 0 2px 9px rgba(0, 0, 0, 0.28);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.map-status {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 18px;
+  z-index: 500;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.leaflet-popup-content {
+  min-width: 190px;
+}
+
+.popup-title {
+  margin-bottom: 4px;
+  font-weight: 800;
+}
+
+.popup-note {
+  color: #586056;
+  line-height: 1.45;
+}
+
+@media (max-width: 900px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .guide-panel {
+    height: auto;
+    min-height: 55vh;
+    border-right: 0;
+  }
+
+  .map-panel {
+    position: relative;
+    height: 58vh;
+  }
+
+  .tips-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .flight-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .flight-route {
+    grid-template-columns: minmax(0, 1fr) 60px minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .guide-panel {
+    padding: 20px;
+  }
+
+  .tabs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .flow-item {
+    grid-template-columns: 1fr;
+  }
+
+  .day-top {
+    display: grid;
+  }
+
+  .drive-pill {
+    position: static;
+    justify-self: start;
+    max-width: none;
+  }
+
+  .day-card h3,
+  .day-card p {
+    padding-right: 0;
+  }
+
+  .map-toolbar {
+    right: 12px;
+    left: 12px;
+  }
+
+  .map-toolbar button {
+    flex: 1;
+    padding: 0 8px;
+  }
+
+  .map-legend {
+    top: 74px;
+    right: 12px;
+    left: 12px;
+    width: auto;
+    max-height: 190px;
+  }
+}

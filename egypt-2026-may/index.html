@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>五一埃及自驾旅行攻略</title>
+    <link rel="stylesheet" href="./vendor/leaflet/leaflet.css">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="guide-panel" aria-label="埃及旅行攻略">
+        <header class="hero">
+          <p class="eyebrow">Egypt Road Trip · May Holiday</p>
+          <h1>五一埃及自驾旅行攻略</h1>
+          <p class="summary">
+            10 天串联红海、尼罗河神庙、阿布辛贝、吉萨金字塔和地中海海岸。节奏前松后紧，适合以自驾为主，穿插出海、夜游神庙和尼罗河日落。
+          </p>
+          <div class="stats" aria-label="行程概览">
+            <span><strong>10</strong> 天</span>
+            <span><strong>9</strong> 段自驾</span>
+            <span><strong>5</strong> 座城市</span>
+          </div>
+          <div class="flight-summary" id="flightSummary" aria-label="往返航班"></div>
+        </header>
+
+        <nav class="tabs" aria-label="攻略导航">
+          <button class="tab-button active" data-view="overview">总览</button>
+          <button class="tab-button" data-view="plan">日程</button>
+          <button class="tab-button" data-view="spots">景点</button>
+          <button class="tab-button" data-view="prep">准备</button>
+        </nav>
+
+        <section class="view active" id="overview">
+          <h2>路线节奏</h2>
+          <div class="route-flow" id="routeFlow"></div>
+
+          <h2>关键建议</h2>
+          <div class="tips-grid">
+            <article>
+              <h3>赫尔格达</h3>
+              <p>第一天只安排酒店休整，第二天早上再出海，适合倒时差和恢复体力。</p>
+            </article>
+            <article>
+              <h3>卢克索</h3>
+              <p>卡纳克和卢克索神庙二选一夜游，另一处放到次日，避免赶场。</p>
+            </article>
+            <article>
+              <h3>阿布辛贝</h3>
+              <p>5 月 5 日是全程最硬的一天，阿斯旺往返阿布辛贝后还要回卢克索，建议极早出发。</p>
+            </article>
+            <article>
+              <h3>开罗到马特鲁港</h3>
+              <p>先看金字塔再北上地中海，当天自驾较长，金字塔游览要控制时间。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="plan">
+          <h2>每日安排</h2>
+          <div class="day-list" id="dayList"></div>
+        </section>
+
+        <section class="view" id="spots">
+          <h2>重点景点</h2>
+          <div class="spot-list" id="spotList"></div>
+        </section>
+
+        <section class="view" id="prep">
+          <h2>出发前检查</h2>
+          <div class="prep-list" id="prepList"></div>
+        </section>
+      </section>
+
+      <section class="map-panel" aria-label="交互地图">
+        <div id="map"></div>
+        <div class="map-toolbar">
+          <button id="fitRouteButton" type="button">显示全程</button>
+          <button id="loadRoutesButton" type="button">加载 OSM 路线</button>
+        </div>
+        <div class="map-legend" id="mapLegend" aria-label="每日路线图例"></div>
+        <div class="map-status" id="mapStatus">底图：Esri World Topographic Map · 路线：OSRM / OpenStreetMap</div>
+      </section>
+    </main>
+
+    <script src="./vendor/leaflet/leaflet.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
