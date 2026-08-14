@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#173f32">
     <title>中秋小兴安岭 · 五花山自驾攻略</title>
     <link rel="stylesheet" href="./vendor/leaflet/leaflet.css">
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./styles.css?v=20260814-tabs">
   </head>
   <body>
     <main class="app-shell">
@@ -36,16 +36,16 @@
           <div id="flightSummary" class="flight-summary"></div>
         </header>
 
-        <nav class="tabs" aria-label="攻略导航">
-          <button class="tab-button active" data-view="overview">总览</button>
-          <button class="tab-button" data-view="plan">日程</button>
-          <button class="tab-button" data-view="lodging">住宿</button>
-          <button class="tab-button" data-view="spots">景点</button>
-          <button class="tab-button" data-view="driving">自驾</button>
-          <button class="tab-button" data-view="prep">准备</button>
+        <nav class="tabs" aria-label="攻略导航" role="tablist">
+          <button class="tab-button active" id="tab-overview" data-view="overview" role="tab" aria-controls="overview" aria-selected="true"><span class="tab-number">01</span><span class="tab-text">总览</span></button>
+          <button class="tab-button" id="tab-plan" data-view="plan" role="tab" aria-controls="plan" aria-selected="false" tabindex="-1"><span class="tab-number">02</span><span class="tab-text">日程</span></button>
+          <button class="tab-button" id="tab-lodging" data-view="lodging" role="tab" aria-controls="lodging" aria-selected="false" tabindex="-1"><span class="tab-number">03</span><span class="tab-text">住宿</span></button>
+          <button class="tab-button" id="tab-spots" data-view="spots" role="tab" aria-controls="spots" aria-selected="false" tabindex="-1"><span class="tab-number">04</span><span class="tab-text">景点</span></button>
+          <button class="tab-button" id="tab-driving" data-view="driving" role="tab" aria-controls="driving" aria-selected="false" tabindex="-1"><span class="tab-number">05</span><span class="tab-text">自驾</span></button>
+          <button class="tab-button" id="tab-prep" data-view="prep" role="tab" aria-controls="prep" aria-selected="false" tabindex="-1"><span class="tab-number">06</span><span class="tab-text">准备</span></button>
         </nav>
 
-        <section class="view active" id="overview">
+        <section class="view active" id="overview" role="tabpanel" aria-labelledby="tab-overview">
           <h2>路线节奏</h2>
           <div class="route-flow" id="routeFlow"></div>
           <h2>先看这四件事</h2>
@@ -58,11 +58,11 @@
           <aside class="notice"><strong>行程年份</strong><p>根据文档时间与 2026 年中秋日期，攻略按 2026 年 9 月 22–27 日整理；若机票实际年份不同，修改数据即可。</p></aside>
         </section>
 
-        <section class="view" id="plan"><h2>每日安排</h2><div id="dayList" class="day-list"></div></section>
-        <section class="view" id="lodging"><h2>住宿落点</h2><p class="section-note">酒店名称来自原文预订截图；订单截图与预订隐私不公开。点击卡片可在地图定位住宿城市。</p><div id="lodgingList" class="lodging-list"></div></section>
-        <section class="view" id="spots"><h2>重点景点</h2><div id="spotList" class="spot-list"></div></section>
-        <section class="view" id="driving"><h2>自驾公路</h2><div id="drivingList" class="driving-list"></div></section>
-        <section class="view" id="prep"><h2>出发前检查</h2><div id="prepList" class="prep-list"></div></section>
+        <section class="view" id="plan" role="tabpanel" aria-labelledby="tab-plan"><h2>每日安排</h2><div id="dayList" class="day-list"></div></section>
+        <section class="view" id="lodging" role="tabpanel" aria-labelledby="tab-lodging"><h2>住宿落点</h2><p class="section-note">酒店名称来自原文预订截图；订单截图与预订隐私不公开。点击卡片可在地图定位住宿城市。</p><div id="lodgingList" class="lodging-list"></div></section>
+        <section class="view" id="spots" role="tabpanel" aria-labelledby="tab-spots"><h2>重点景点</h2><div id="spotList" class="spot-list"></div></section>
+        <section class="view" id="driving" role="tabpanel" aria-labelledby="tab-driving"><h2>自驾公路</h2><div id="drivingList" class="driving-list"></div></section>
+        <section class="view" id="prep" role="tabpanel" aria-labelledby="tab-prep"><h2>出发前检查</h2><div id="prepList" class="prep-list"></div></section>
       </section>
 
       <section class="map-panel" aria-label="交互地图">
@@ -78,6 +78,6 @@
       </section>
     </main>
     <script src="./vendor/leaflet/leaflet.js"></script>
-    <script src="./app.js?v=20260814-image-referrer"></script>
+    <script src="./app.js?v=20260814-tabs"></script>
   </body>
 </html>

@@ -4,3 +4,15 @@
 .calendar-badge{font-weight:900;box-shadow:0 3px 8px rgba(191,119,37,.22)}.calendar-badge--leave{background:var(--red);box-shadow:0 3px 8px rgba(168,70,49,.24)}
 @media(max-width:900px){.app-shell{display:block}.guide-panel{height:auto;overflow:visible;padding:22px}.map-panel{position:relative;height:68vh;min-height:500px}.flight-summary,.tips-grid{grid-template-columns:1fr}.tabs{top:6px}.map-legend{max-height:180px;overflow:auto}.map-toolbar{right:12px;left:12px}}
 @media(max-width:520px){.guide-panel{padding:17px}.tabs{grid-template-columns:repeat(3,1fr)}h1{font-size:43px}.trip-calendar{grid-template-columns:repeat(3,minmax(0,1fr))}.calendar-day{min-height:104px}.flow-item{grid-template-columns:58px 1fr}.flow-arrow{display:none}.map-panel{height:76vh}.map-toolbar button{padding:7px 8px;font-size:12px}.map-status{left:12px;right:auto}.map-legend{right:12px;bottom:47px}.spot-images{height:120px}}
+
+.tabs{top:8px;gap:6px;padding:7px;border-color:#c8d2c8;background:#e8eee8;box-shadow:0 12px 28px rgba(27,62,47,.16),inset 0 1px 0 rgba(255,255,255,.9)}
+.tab-button{position:relative;display:flex;min-width:0;min-height:50px;align-items:center;justify-content:center;gap:7px;padding:8px 10px;border:1px solid rgba(31,91,70,.1);border-radius:6px;color:#54645b;background:rgba(255,255,255,.7);box-shadow:inset 0 -1px 0 rgba(31,91,70,.06);font-weight:820;transition:color .18s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease}
+.tab-button::after{position:absolute;right:50%;bottom:4px;width:18px;height:3px;border-radius:3px;background:#f0c36a;content:"";opacity:0;transform:translateX(50%);transition:opacity .18s ease,width .18s ease}
+.tab-button:hover{border-color:#aebfb2;color:var(--pine);background:#fff}
+.tab-button.active{border-color:var(--pine);color:#fff;background:var(--pine);box-shadow:0 8px 18px rgba(31,91,70,.28);transform:translateY(-1px)}
+.tab-button.active::after{width:26px;opacity:1}
+.tab-button:focus-visible{outline:3px solid rgba(191,119,37,.35);outline-offset:2px}
+.tab-number{color:var(--amber);font-size:9px;font-weight:900;letter-spacing:.08em}
+.tab-button.active .tab-number{color:#f7d79a}
+.tab-text{overflow:hidden;font-size:14px;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:520px){.tabs{top:4px;gap:4px;padding:5px}.tab-button{min-height:44px;padding:7px 5px}.tab-number{display:none}.tab-text{font-size:13px}}

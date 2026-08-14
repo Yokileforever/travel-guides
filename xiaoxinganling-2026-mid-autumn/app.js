@@ -66,7 +66,20 @@ function renderSpots(){document.querySelector("#spotList").innerHTML=spots.map(s
 function renderDriving(){document.querySelector("#drivingList").innerHTML=drivingNotes.map(d=>`<article class="driving-card"><span class="chip">${d.tag}</span><h3>${d.name}</h3><p>${d.note}</p></article>`).join("")}
 function renderPrep(){document.querySelector("#prepList").innerHTML=prep.map(g=>`<article class="prep-group"><h3>${g.group}</h3><ul>${g.items.map(i=>`<li>${i}</li>`).join("")}</ul></article>`).join("")}
 renderFlights();renderCalendar();renderFlow();renderDays();renderLodgings();renderSpots();renderDriving();renderPrep();
-document.querySelectorAll(".tab-button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".tab-button,.view").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelector(`#${b.dataset.view}`).classList.add("active")}));
+const tabButtons=[...document.querySelectorAll(".tab-button")];
+function activateTab(button,focus=false){
+  tabButtons.forEach(tab=>{const active=tab===button;tab.classList.toggle("active",active);tab.setAttribute("aria-selected",String(active));tab.tabIndex=active?0:-1});
+  document.querySelectorAll(".view").forEach(view=>view.classList.toggle("active",view.id===button.dataset.view));
+  if(focus)button.focus();
+}
+tabButtons.forEach(button=>button.addEventListener("click",()=>activateTab(button)));
+document.querySelector(".tabs").addEventListener("keydown",event=>{
+  if(!["ArrowLeft","ArrowRight","Home","End"].includes(event.key))return;
+  event.preventDefault();
+  const current=tabButtons.indexOf(document.activeElement);
+  const next=event.key==="Home"?0:event.key==="End"?tabButtons.length-1:event.key==="ArrowRight"?(current+1)%tabButtons.length:(current-1+tabButtons.length)%tabButtons.length;
+  activateTab(tabButtons[next],true);
+});
 const map=L.map("map",{zoomControl:false}).setView([47.55,129.15],7);L.control.zoom({position:"bottomleft"}).addTo(map);L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",{attribution:"Tiles © Esri · Route data © OpenStreetMap contributors",maxZoom:17}).addTo(map);
 const layers={fallback:L.layerGroup().addTo(map),route:L.layerGroup().addTo(map),labels:L.layerGroup().addTo(map),spots:L.layerGroup().addTo(map),hotels:L.layerGroup().addTo(map)};const hotelMarkers=new Map(),spotMarkers=new Map(),fallbackLines=[];
 days.forEach((d,i)=>{const coords=d.route.map(k=>[places[k].lat,places[k].lng]);const line=L.polyline(coords,{color:colors[i],weight:4,opacity:.82,dashArray:"9 9"}).addTo(layers.fallback);fallbackLines.push(line);const mid=coords[Math.floor(coords.length/2)];L.tooltip({permanent:true,direction:"center",className:"map-label"}).setLatLng(mid).setContent(d.date.split(" ")[0]).addTo(layers.labels)});
