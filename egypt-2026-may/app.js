@@ -277,9 +277,9 @@ const lodgings = [
     city: "马特鲁港",
     dates: "5 月 7 日 - 5 月 9 日",
     nights: "2 晚",
-    lat: 31.3500,
-    lng: 27.2634,
-    note: "地中海海岸休整两晚，作为长途返开罗前的缓冲。",
+    lat: 31.3609349,
+    lng: 27.2225450,
+    note: "位于 Beausite 海滨区域，紧邻酒店私人海滩，作为长途返开罗前的缓冲。",
     bookingLinks: [
       { provider: "Booking.com", url: "https://www.booking.com/hotel/eg/host-mark-blue-beach.html" },
       { provider: "Trip.com", url: "https://www.trip.com/hotels/mersa-matruh-hotel-detail-131945346/hostmark-blue-beach-hotel/" }
