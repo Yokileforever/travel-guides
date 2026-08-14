@@ -55,6 +55,13 @@ const places = {
     lng: 32.6014,
     note: "西岸行程重点，可与帝王谷方向组合。"
   },
+  valleyOfKings: {
+    name: "帝王谷",
+    city: "卢克索",
+    lat: 25.7402,
+    lng: 32.6014,
+    note: "卢克索西岸备选景点，可与哈布城组合安排。"
+  },
   komOmbo: {
     name: "考姆翁布神庙",
     city: "考姆翁布",
@@ -305,6 +312,7 @@ const spots = [
   {
     name: "赫尔格达出海",
     city: "红海",
+    place: "hurghadaMarina",
     date: "5 月 2 日",
     tag: "出海体验",
     note: "海钓、跳岛、追海豚，建议提前一天到码头谈价格。",
@@ -313,6 +321,7 @@ const spots = [
   {
     name: "丹德拉神庙群",
     city: "基纳",
+    place: "dendera",
     date: "5 月 2 日",
     tag: "神庙",
     note: "从赫尔格达去卢克索的途中顺路，开放时间参考 7:00-17:00。",
@@ -324,6 +333,7 @@ const spots = [
   {
     name: "卢克索神庙",
     city: "卢克索",
+    place: "luxorTemple",
     date: "5 月 2 日 / 3 日",
     tag: "神庙 · 夜游",
     note: "夜游亮灯约 19:00，21:00 关灯，亮灯前到更从容。",
@@ -336,6 +346,7 @@ const spots = [
   {
     name: "卡纳克神庙",
     city: "卢克索",
+    place: "karnak",
     date: "5 月 2 日 / 3 日",
     tag: "神庙 · 夜游",
     note: "羊头狮身像大道、大列柱厅、方尖碑、圣甲虫是核心看点。",
@@ -349,6 +360,7 @@ const spots = [
   {
     name: "哈布城",
     city: "卢克索",
+    place: "medinetHabu",
     date: "5 月 3 日",
     tag: "西岸古迹",
     note: "西岸重点，可和帝王谷方向组合成半日线。",
@@ -357,6 +369,7 @@ const spots = [
   {
     name: "帝王谷",
     city: "卢克索",
+    place: "valleyOfKings",
     date: "5 月 3 日 · 备选",
     tag: "西岸古迹",
     note: "原文列出的卢克索西岸景点，可与哈布城组合；当前日程将它保留为体力和时间允许时的备选。",
@@ -365,6 +378,8 @@ const spots = [
   {
     name: "卢克索落日巡航",
     city: "卢克索",
+    place: "luxor",
+    locationNote: "参考落点，具体码头待确认",
     date: "卢克索段 · 备选",
     tag: "尼罗河体验",
     note: "原文记录约 17:00 开始、时长 1 小时；尚未放入固定日程，可按当天神庙结束时间决定。",
@@ -373,6 +388,8 @@ const spots = [
   {
     name: "卢克索尼罗河巡游",
     city: "卢克索",
+    place: "luxor",
+    locationNote: "参考落点，具体码头待确认",
     date: "卢克索段 · 待补",
     tag: "尼罗河体验",
     note: "原文已列出该体验，但尚未补充码头、时间与价格，先作为待完善的备选项目保留。",
@@ -381,6 +398,7 @@ const spots = [
   {
     name: "考姆翁布神庙",
     city: "考姆翁布",
+    place: "komOmbo",
     date: "5 月 4 日",
     tag: "神庙 · 顺路",
     note: "卢克索到阿斯旺路上顺访，不建议专程折返。",
@@ -392,6 +410,7 @@ const spots = [
   {
     name: "阿斯旺尼罗河下午茶",
     city: "阿斯旺",
+    place: "oldCataract",
     date: "5 月 4 日",
     tag: "下午茶 · 观景",
     note: "15:00-16:30 光线柔和，Old Cataract 复古，Freya Garden 性价比高。",
@@ -403,6 +422,8 @@ const spots = [
   {
     name: "阿斯旺落日巡航",
     city: "阿斯旺",
+    place: "aswan",
+    locationNote: "参考落点，具体上船点以当天确认为准",
     date: "5 月 4 日",
     tag: "帆船 · 日落",
     note: "16:30 出发，17:00-18:10 适合帆船日落。",
@@ -411,6 +432,7 @@ const spots = [
   {
     name: "阿布辛贝神庙",
     city: "阿布辛贝",
+    place: "abuSimbel",
     date: "5 月 5 日",
     tag: "神庙",
     note: "远但震撼，适合早起冲刺，当天行车压力最大。",
@@ -419,6 +441,7 @@ const spots = [
   {
     name: "胡夫金字塔",
     city: "吉萨",
+    place: "pyramids",
     date: "5 月 7 日",
     tag: "金字塔 · 拍照",
     note: "重点安排游览路线和六塔重叠机位，控制时间后继续北上马特鲁港。",
@@ -431,6 +454,7 @@ const spots = [
   {
     name: "万豪米娜宫绿洲金字塔机位",
     city: "吉萨",
+    place: "menaHouse",
     date: "5 月 7 日",
     tag: "拍照点",
     note: "Marriott Mena House 的绿洲金字塔视角，和胡夫金字塔同日安排。",
@@ -485,6 +509,7 @@ const prep = [
 
 const palette = ["#2f6f54", "#246b8f", "#bb5a43", "#aa7a22", "#7a4f8f", "#3f7d7a", "#c06135", "#596b3b", "#8e4e63", "#4776a9"];
 const allRouteKeys = days.flatMap((day) => day.route);
+const spotPlaceKeys = new Set(spots.map((spot) => spot.place));
 const boundsPoints = [
   ...[...new Set(allRouteKeys)].map((key) => [places[key].lat, places[key].lng]),
   ...lodgings.map((lodging) => [lodging.lat, lodging.lng])
@@ -504,12 +529,26 @@ L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map
 
 const markerLayer = L.layerGroup().addTo(map);
 const lodgingLayer = L.layerGroup().addTo(map);
+const spotLayer = L.layerGroup().addTo(map);
 const fallbackLayer = L.layerGroup().addTo(map);
 const routeLayer = L.layerGroup().addTo(map);
 const labelLayer = L.layerGroup().addTo(map);
 const fallbackRoutes = [];
 const osmRoutes = [];
 const lodgingMarkers = [];
+const spotMarkers = new Map();
+
+function getMapFitOptions(maxZoom) {
+  const mapWidth = map.getSize().x;
+  const wideMap = mapWidth >= 620;
+  const legendWidth = document.querySelector("#mapLegend")?.offsetWidth || 250;
+  const rightReserve = wideMap ? Math.min(legendWidth + 55, mapWidth * 0.48) : 45;
+  return {
+    paddingTopLeft: wideMap ? [70, 80] : [45, 70],
+    paddingBottomRight: [rightReserve, wideMap ? 80 : 70],
+    ...(maxZoom ? { maxZoom } : {})
+  };
+}
 
 const locationIcon = L.divIcon({
   className: "location-pin",
@@ -524,6 +563,21 @@ const lodgingIcon = L.divIcon({
   iconSize: [34, 34],
   iconAnchor: [17, 17]
 });
+
+const spotIcon = L.divIcon({
+  className: "spot-pin",
+  html: "<span>景</span>",
+  iconSize: [32, 32],
+  iconAnchor: [16, 16]
+});
+
+const spotClusters = [
+  { name: "红海", places: ["hurghadaMarina"] },
+  { name: "卢克索", places: ["dendera", "luxorTemple", "karnak", "medinetHabu", "valleyOfKings", "luxor"] },
+  { name: "阿斯旺", places: ["komOmbo", "oldCataract", "aswan"] },
+  { name: "阿布辛贝", places: ["abuSimbel"] },
+  { name: "吉萨", places: ["pyramids", "menaHouse"] }
+];
 
 function renderLodgingLinks(lodging, compact = false) {
   return `
@@ -542,6 +596,7 @@ function renderLodgingLinks(lodging, compact = false) {
 }
 
 Object.entries(places).forEach(([key, place]) => {
+  if (spotPlaceKeys.has(key)) return;
   L.marker([place.lat, place.lng], { icon: locationIcon })
     .bindPopup(`<div class="popup-title">${place.name}</div><div class="popup-note">${place.note}</div>`)
     .addTo(markerLayer);
@@ -560,6 +615,61 @@ lodgings.forEach((lodging, index) => {
   lodgingMarkers.push(marker);
 });
 
+const spotsByPlace = spots.reduce((groups, spot) => {
+  const group = groups.get(spot.place) || [];
+  group.push(spot);
+  groups.set(spot.place, group);
+  return groups;
+}, new Map());
+
+spotsByPlace.forEach((placeSpots, placeKey) => {
+  const place = places[placeKey];
+  if (!place) return;
+  const marker = L.marker([place.lat, place.lng], { icon: spotIcon, zIndexOffset: 600 })
+    .bindPopup(`
+      <div class="popup-kicker">${place.city} · 景点与体验</div>
+      ${placeSpots.map((spot) => `
+        <div class="popup-title">${spot.name}</div>
+        <div class="popup-note">${spot.date}｜${spot.note}</div>
+        ${spot.locationNote ? `<div class="popup-location-note">${spot.locationNote}</div>` : ""}
+      `).join("")}
+    `);
+  spotMarkers.set(placeKey, marker);
+});
+
+const spotOverviewMarkers = spotClusters.map((cluster) => {
+  const points = cluster.places.map((placeKey) => places[placeKey]);
+  const count = cluster.places.reduce((total, placeKey) => total + (spotsByPlace.get(placeKey)?.length || 0), 0);
+  const center = [
+    points.reduce((sum, point) => sum + point.lat, 0) / points.length,
+    points.reduce((sum, point) => sum + point.lng, 0) / points.length
+  ];
+  const marker = L.marker(center, {
+    icon: L.divIcon({
+      className: "spot-cluster-pin",
+      html: `<span><strong>${count}</strong><small>${cluster.name}</small></span>`,
+      iconSize: [54, 44],
+      iconAnchor: [27, 22]
+    }),
+    title: `${cluster.name} · ${count} 项景点与体验`,
+    zIndexOffset: 600
+  });
+  marker.on("click", () => {
+    if (points.length === 1) {
+      map.setView([points[0].lat, points[0].lng], 10);
+      return;
+    }
+    map.fitBounds(points.map((point) => [point.lat, point.lng]), getMapFitOptions(10));
+  });
+  return marker;
+});
+
+function refreshSpotLayer() {
+  spotLayer.clearLayers();
+  const markers = map.getZoom() <= 6 ? spotOverviewMarkers : [...spotMarkers.values()];
+  markers.forEach((marker) => spotLayer.addLayer(marker));
+}
+
 days.forEach((day, index) => {
   const latlngs = day.route.map((key) => [places[key].lat, places[key].lng]);
   if (latlngs.length > 1) {
@@ -574,8 +684,11 @@ days.forEach((day, index) => {
   }
 });
 
-map.fitBounds(boundsPoints, { padding: [45, 45] });
+map.fitBounds(boundsPoints, getMapFitOptions());
+refreshSpotLayer();
+map.on("zoomend", refreshSpotLayer);
 requestAnimationFrame(() => map.invalidateSize());
+requestAnimationFrame(() => map.fitBounds(boundsPoints, getMapFitOptions()));
 window.addEventListener("resize", () => map.invalidateSize());
 
 function render() {
@@ -677,7 +790,7 @@ function render() {
   document.querySelector("#spotCount").textContent = `${spots.length} 项`;
   document.querySelector("#spotList").innerHTML = spots
     .map((spot) => `
-      <article class="spot-card">
+      <article class="spot-card" data-spot-place="${spot.place}" role="button" tabindex="0" aria-label="在地图查看 ${spot.name}">
         ${renderSpotImages(spot)}
         <div class="spot-meta">
           <span>${spot.city}</span>
@@ -740,6 +853,7 @@ function renderSpotImages(spot) {
 }
 
 function focusDay(index) {
+  document.querySelector("#mapLegend").classList.remove("map-legend--spot-focus");
   document.querySelectorAll(".day-card").forEach((card) => {
     card.classList.toggle("active", Number(card.dataset.day) === index);
   });
@@ -752,7 +866,7 @@ function focusDay(index) {
   if (latlngs.length === 1) {
     map.setView(latlngs[0], 10);
   } else {
-    map.fitBounds(latlngs, { padding: [70, 70] });
+    map.fitBounds(latlngs, getMapFitOptions());
   }
   highlightDay(index);
 }
@@ -767,6 +881,31 @@ function focusLodging(index) {
   document.querySelectorAll(".lodging-card").forEach((card) => {
     card.classList.toggle("active", Number(card.dataset.lodging) === index);
   });
+}
+
+function focusSpot(placeKey) {
+  const place = places[placeKey];
+  if (!place) return;
+  spotLayer.addTo(map);
+  document.querySelector("#toggleSpotsButton").setAttribute("aria-pressed", "true");
+  const target = L.latLng(place.lat, place.lng);
+  const openSpotPopup = () => {
+    refreshSpotLayer();
+    spotMarkers.get(placeKey)?.openPopup();
+  };
+  if (map.getZoom() === 13 && map.getCenter().distanceTo(target) < 5) {
+    openSpotPopup();
+  } else {
+    map.once("moveend", openSpotPopup);
+    map.setView(target, 13);
+  }
+  document.querySelectorAll(".spot-card").forEach((card) => {
+    card.classList.toggle("active", card.dataset.spotPlace === placeKey);
+  });
+  if (window.innerWidth <= 900) {
+    document.querySelector("#mapLegend").classList.add("map-legend--spot-focus");
+    document.querySelector("#map").scrollIntoView({ behavior: "smooth", block: "center" });
+  }
 }
 
 function shortDate(dateText) {
@@ -886,6 +1025,20 @@ document.querySelector("#lodgingList").addEventListener("click", (event) => {
   focusLodging(Number(card.dataset.lodging));
 });
 
+document.querySelector("#spotList").addEventListener("click", (event) => {
+  const card = event.target.closest(".spot-card");
+  if (!card) return;
+  focusSpot(card.dataset.spotPlace);
+});
+
+document.querySelector("#spotList").addEventListener("keydown", (event) => {
+  if (event.key !== "Enter" && event.key !== " ") return;
+  const card = event.target.closest(".spot-card");
+  if (!card) return;
+  event.preventDefault();
+  focusSpot(card.dataset.spotPlace);
+});
+
 document.querySelector("#mapLegend").addEventListener("click", (event) => {
   const item = event.target.closest(".legend-item");
   if (!item) return;
@@ -893,7 +1046,8 @@ document.querySelector("#mapLegend").addEventListener("click", (event) => {
 });
 
 document.querySelector("#fitRouteButton").addEventListener("click", () => {
-  map.fitBounds(boundsPoints, { padding: [45, 45] });
+  document.querySelector("#mapLegend").classList.remove("map-legend--spot-focus");
+  map.fitBounds(boundsPoints, getMapFitOptions());
 });
 
 document.querySelector("#toggleLodgingButton").addEventListener("click", (event) => {
@@ -902,6 +1056,17 @@ document.querySelector("#toggleLodgingButton").addEventListener("click", (event)
     map.removeLayer(lodgingLayer);
   } else {
     lodgingLayer.addTo(map);
+  }
+  event.currentTarget.setAttribute("aria-pressed", String(!enabled));
+});
+
+document.querySelector("#toggleSpotsButton").addEventListener("click", (event) => {
+  const enabled = map.hasLayer(spotLayer);
+  if (enabled) {
+    map.removeLayer(spotLayer);
+  } else {
+    spotLayer.addTo(map);
+    refreshSpotLayer();
   }
   event.currentTarget.setAttribute("aria-pressed", String(!enabled));
 });

@@ -556,7 +556,10 @@ h3 {
 .day-card:hover,
 .day-card.active,
 .lodging-card:hover,
-.lodging-card.active {
+.lodging-card.active,
+.spot-card:hover,
+.spot-card.active,
+.spot-card:focus-visible {
   border-color: var(--green);
   transform: translateY(-1px);
 }
@@ -716,6 +719,8 @@ h3 {
 .spot-card {
   display: grid;
   gap: 8px;
+  cursor: pointer;
+  outline: none;
 }
 
 .spot-meta {
@@ -947,6 +952,52 @@ h3 {
   transform: rotate(45deg);
 }
 
+.spot-pin span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 3px solid white;
+  border-radius: 50%;
+  color: white;
+  background: var(--coral);
+  box-shadow: 0 4px 12px rgba(38, 45, 37, 0.32);
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.spot-cluster-pin span {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 44px;
+  border: 3px solid white;
+  border-radius: 8px;
+  color: white;
+  background: var(--coral);
+  box-shadow: 0 4px 14px rgba(38, 45, 37, 0.34);
+  line-height: 1;
+}
+
+.spot-cluster-pin strong {
+  margin-top: 4px;
+  font-size: 16px;
+}
+
+.spot-cluster-pin small {
+  margin-bottom: 4px;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.popup-location-note {
+  margin-top: 4px;
+  color: var(--coral);
+  font-size: 11px;
+  font-weight: 750;
+}
+
 .map-status {
   position: absolute;
   left: 18px;
@@ -1006,6 +1057,10 @@ h3 {
 
   .flight-route {
     grid-template-columns: minmax(0, 1fr) 60px minmax(0, 1fr);
+  }
+
+  .map-legend.map-legend--spot-focus {
+    display: none;
   }
 }
 
