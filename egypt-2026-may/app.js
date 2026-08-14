@@ -219,6 +219,20 @@ const flights = [
   }
 ];
 
+const tripCalendar = [
+  { month: "4月", date: "30", weekday: "周四", type: "workday", label: "工作日", note: "深夜出发" },
+  { month: "5月", date: "1", weekday: "周五", type: "holiday", label: "劳动节", note: "法定假期", badge: "假", badgeTitle: "劳动节假期" },
+  { month: "5月", date: "2", weekday: "周六", type: "weekend", label: "周末", note: "劳动节假期", badge: "假", badgeTitle: "周末且属于劳动节假期" },
+  { month: "5月", date: "3", weekday: "周日", type: "weekend", label: "周末", note: "劳动节假期", badge: "假", badgeTitle: "周末且属于劳动节假期" },
+  { month: "5月", date: "4", weekday: "周一", type: "holiday", label: "劳动节假期", note: "调休放假", badge: "假", badgeTitle: "劳动节调休假期" },
+  { month: "5月", date: "5", weekday: "周二", type: "holiday", label: "劳动节假期", note: "调休放假", badge: "假", badgeTitle: "劳动节调休假期" },
+  { month: "5月", date: "6", weekday: "周三", type: "leave", label: "请假", note: "金字塔日", badge: "请", badgeTitle: "需要请假" },
+  { month: "5月", date: "7", weekday: "周四", type: "leave", label: "请假", note: "地中海段", badge: "请", badgeTitle: "需要请假" },
+  { month: "5月", date: "8", weekday: "周五", type: "leave", label: "请假", note: "马特鲁港", badge: "请", badgeTitle: "需要请假" },
+  { month: "5月", date: "9", weekday: "周六", type: "weekend", label: "周末", note: "返回开罗", badge: "假", badgeTitle: "周末" },
+  { month: "5月", date: "10", weekday: "周日", type: "weekend", label: "周末", note: "返程抵沪", badge: "假", badgeTitle: "周末" }
+];
+
 const lodgings = [
   {
     name: "Sunny Days Palma De Mirette Resort & SPA",
@@ -514,6 +528,20 @@ requestAnimationFrame(() => map.invalidateSize());
 window.addEventListener("resize", () => map.invalidateSize());
 
 function render() {
+  document.querySelector("#tripCalendar").innerHTML = tripCalendar
+    .map((day) => `
+      <article class="calendar-day calendar-day--${day.type}">
+        <div class="calendar-day-top">
+          <span>${day.month} · ${day.weekday}</span>
+          ${day.badge ? `<i class="calendar-badge calendar-badge--${day.type}" title="${day.badgeTitle}">${day.badge}</i>` : ""}
+        </div>
+        <strong>${day.date}</strong>
+        <span class="calendar-day-label">${day.label}</span>
+        <small>${day.note}</small>
+      </article>
+    `)
+    .join("");
+
   document.querySelector("#flightSummary").innerHTML = flights
     .map((flight) => `
       <article class="flight-card">

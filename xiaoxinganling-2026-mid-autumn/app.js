@@ -1,4 +1,4 @@
-const trip={slug:"xiaoxinganling-2026-mid-autumn",title:"中秋小兴安岭",dates:{start:"2026-09-22",end:"2026-09-26"},modules:{flights:true,itinerary:true,map:true,lodging:true,spots:true,driving:true,prep:true}};
+const trip={slug:"xiaoxinganling-2026-mid-autumn",title:"中秋小兴安岭",dates:{start:"2026-09-22",end:"2026-09-27"},modules:{flights:true,calendar:true,itinerary:true,map:true,lodging:true,spots:true,driving:true,prep:true}};
 const places={
   harbinAirport:{name:"哈尔滨太平机场",lat:45.6234,lng:126.2503,type:"airport"}, harbin:{name:"汉庭哈尔滨江北大学城地铁站酒店",lat:45.864,lng:126.548},
   huanlang:{name:"环廊公路",lat:46.45,lng:128.15,note:"林区公路赏秋段，具体入口以当天导航为准。"}, wudai:{name:"乌带公路",lat:46.78,lng:128.82,note:"五花山自驾重点，留意临时停车与林区防火规定。"},
@@ -12,6 +12,14 @@ const places={
 const flights=[
   {direction:"去程 · 9 月 22 日",flightNo:"GJ8232",from:{code:"HGH",city:"杭州 T3",time:"19:25"},to:{code:"HRB",city:"哈尔滨 T2",time:"22:40"},note:"抵达较晚，当晚只安排入住与休息。"},
   {direction:"回程 · 9 月 26 日",flightNo:"CA8330",from:{code:"JMU",city:"佳木斯",time:"19:25"},to:{code:"PVG",city:"上海浦东 T2",time:"22:30"},note:"落地后转地面交通回杭州；佳木斯还车与值机要留足时间。"}
+];
+const tripCalendar=[
+  {date:"22",weekday:"周二",type:"workday",label:"工作日",note:"晚间出发"},
+  {date:"23",weekday:"周三",type:"leave",label:"请假",note:"自驾启程",badge:"请",badgeTitle:"需要请假"},
+  {date:"24",weekday:"周四",type:"leave",label:"请假",note:"森林景区",badge:"请",badgeTitle:"需要请假"},
+  {date:"25",weekday:"周五",type:"holiday",label:"中秋假期",note:"法定假日",badge:"假",badgeTitle:"中秋法定假期"},
+  {date:"26",weekday:"周六",type:"weekend",label:"周末",note:"中秋假期",badge:"假",badgeTitle:"周末且属于中秋假期"},
+  {date:"27",weekday:"周日",type:"weekend",label:"周末",note:"中秋假期",badge:"假",badgeTitle:"周末且属于中秋假期"}
 ];
 const days=[
   {date:"9/22 周二",title:"杭州 → 哈尔滨",drive:"落地日",route:["harbinAirport","harbin"],activities:["19:25 杭州 T3 起飞","22:40 抵达哈尔滨 T2","入住汉庭哈尔滨江北大学城地铁站酒店，尽快休息"],stay:"汉庭哈尔滨江北大学城地铁站酒店"},
@@ -48,6 +56,7 @@ const prep=[
 ];
 const colors=["#a84631","#c77728","#1f6b55","#35778c","#66558f"];
 function renderFlights(){document.querySelector("#flightSummary").innerHTML=flights.map(f=>`<article class="flight-card"><div class="flight-top"><p>${f.direction}</p><span class="flight-no">${f.flightNo}</span></div><div class="flight-route"><div class="airport"><strong>${f.from.code}</strong><span>${f.from.city}</span><small>${f.from.time}</small></div><span class="plane">✈</span><div class="airport"><strong>${f.to.code}</strong><span>${f.to.city}</span><small>${f.to.time}</small></div></div><small>${f.note}</small></article>`).join("")}
+function renderCalendar(){document.querySelector("#tripCalendar").innerHTML=tripCalendar.map(d=>`<article class="calendar-day calendar-day--${d.type}"><div class="calendar-day-top"><span>${d.weekday}</span>${d.badge?`<i class="calendar-badge calendar-badge--${d.type}" title="${d.badgeTitle}">${d.badge}</i>`:""}</div><strong>${d.date}</strong><span class="calendar-day-label">${d.label}</span><small>${d.note}</small></article>`).join("")}
 function renderBookingLinks(lodging,compact=false){return `<div class="lodging-booking-links${compact?" lodging-booking-links--compact":""}" aria-label="${lodging.name} 预订平台">${lodging.bookingLinks.map(link=>`<a class="lodging-booking-link trip-provider" href="${link.url}" target="_blank" rel="noopener noreferrer" aria-label="在 ${link.provider} 查看 ${lodging.name}"><span>${link.provider}</span><span aria-hidden="true">↗</span></a>`).join("")}</div>`}
 function renderLodgingPrice(lodging,compact=false){const p=lodging.price;const booked=p.status==="booked";return `<div class="lodging-price${compact?" lodging-price--compact":""}"><span class="lodging-price-status ${booked?"is-booked":"is-reference"}">${booked?"已预订":`参考价 · ${lodging.dates}`}</span><strong><small>¥</small>${p.amount}</strong><span class="lodging-price-basis">${p.basis}</span></div>`}
 function renderFlow(){document.querySelector("#routeFlow").innerHTML=days.map(d=>`<article class="flow-item"><span class="flow-date">${d.date.split(" ")[0]}</span><div><strong>${d.title}</strong><p>${d.drive} · 住 ${d.stay}</p></div><span class="flow-arrow">→</span></article>`).join("")}
@@ -56,7 +65,7 @@ function renderLodgings(){document.querySelector("#lodgingList").innerHTML=lodgi
 function renderSpots(){document.querySelector("#spotList").innerHTML=spots.map(s=>`<article class="spot-card focus-map" data-place="${s.place}">${s.images.length?`<div class="spot-images">${s.images.map(src=>`<img loading="lazy" src="${src}" alt="${s.name}参考图" onerror="this.hidden=true">`).join("")}</div>`:""}<div class="spot-copy"><div class="spot-meta"><span class="chip">${s.tag}</span></div><h3>${s.name}</h3><p>${s.note}</p></div></article>`).join("")}
 function renderDriving(){document.querySelector("#drivingList").innerHTML=drivingNotes.map(d=>`<article class="driving-card"><span class="chip">${d.tag}</span><h3>${d.name}</h3><p>${d.note}</p></article>`).join("")}
 function renderPrep(){document.querySelector("#prepList").innerHTML=prep.map(g=>`<article class="prep-group"><h3>${g.group}</h3><ul>${g.items.map(i=>`<li>${i}</li>`).join("")}</ul></article>`).join("")}
-renderFlights();renderFlow();renderDays();renderLodgings();renderSpots();renderDriving();renderPrep();
+renderFlights();renderCalendar();renderFlow();renderDays();renderLodgings();renderSpots();renderDriving();renderPrep();
 document.querySelectorAll(".tab-button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".tab-button,.view").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelector(`#${b.dataset.view}`).classList.add("active")}));
 const map=L.map("map",{zoomControl:false}).setView([47.55,129.15],7);L.control.zoom({position:"bottomleft"}).addTo(map);L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",{attribution:"Tiles © Esri · Route data © OpenStreetMap contributors",maxZoom:17}).addTo(map);
 const layers={fallback:L.layerGroup().addTo(map),route:L.layerGroup().addTo(map),labels:L.layerGroup().addTo(map),spots:L.layerGroup().addTo(map),hotels:L.layerGroup().addTo(map)};const hotelMarkers=new Map(),spotMarkers=new Map(),fallbackLines=[];
