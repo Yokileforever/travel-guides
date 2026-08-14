@@ -719,9 +719,26 @@ h3 {
 }
 
 .spot-meta {
-  color: var(--gold);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
   font-size: 13px;
   font-weight: 700;
+}
+
+.spot-meta span,
+.section-count {
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: #7f5a16;
+  background: #f5eddc;
+}
+
+.section-count {
+  display: inline-block;
+  margin-left: 6px;
+  vertical-align: 3px;
+  font-size: 12px;
 }
 
 .spot-images {

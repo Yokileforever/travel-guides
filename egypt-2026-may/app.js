@@ -305,12 +305,16 @@ const spots = [
   {
     name: "赫尔格达出海",
     city: "红海",
+    date: "5 月 2 日",
+    tag: "出海体验",
     note: "海钓、跳岛、追海豚，建议提前一天到码头谈价格。",
     images: []
   },
   {
     name: "丹德拉神庙群",
     city: "基纳",
+    date: "5 月 2 日",
+    tag: "神庙",
     note: "从赫尔格达去卢克索的途中顺路，开放时间参考 7:00-17:00。",
     images: [
       "https://cdn.nlark.com/yuque/0/2026/png/21411456/1776583288596-392c9c72-347e-4887-8c92-bdb489676e8d.png",
@@ -320,6 +324,8 @@ const spots = [
   {
     name: "卢克索神庙",
     city: "卢克索",
+    date: "5 月 2 日 / 3 日",
+    tag: "神庙 · 夜游",
     note: "夜游亮灯约 19:00，21:00 关灯，亮灯前到更从容。",
     images: [
       "https://cdn.nlark.com/yuque/0/2026/png/21411456/1776583364677-5cdb94fd-c6c8-4985-9580-d2df4eecf4ad.png",
@@ -330,6 +336,8 @@ const spots = [
   {
     name: "卡纳克神庙",
     city: "卢克索",
+    date: "5 月 2 日 / 3 日",
+    tag: "神庙 · 夜游",
     note: "羊头狮身像大道、大列柱厅、方尖碑、圣甲虫是核心看点。",
     images: [
       "https://cdn.nlark.com/yuque/0/2026/png/21411456/1776583811249-77c4aefc-207a-4082-98a1-dd37bd04b2ed.png",
@@ -341,12 +349,40 @@ const spots = [
   {
     name: "哈布城",
     city: "卢克索",
+    date: "5 月 3 日",
+    tag: "西岸古迹",
     note: "西岸重点，可和帝王谷方向组合成半日线。",
+    images: []
+  },
+  {
+    name: "帝王谷",
+    city: "卢克索",
+    date: "5 月 3 日 · 备选",
+    tag: "西岸古迹",
+    note: "原文列出的卢克索西岸景点，可与哈布城组合；当前日程将它保留为体力和时间允许时的备选。",
+    images: []
+  },
+  {
+    name: "卢克索落日巡航",
+    city: "卢克索",
+    date: "卢克索段 · 备选",
+    tag: "尼罗河体验",
+    note: "原文记录约 17:00 开始、时长 1 小时；尚未放入固定日程，可按当天神庙结束时间决定。",
+    images: []
+  },
+  {
+    name: "卢克索尼罗河巡游",
+    city: "卢克索",
+    date: "卢克索段 · 待补",
+    tag: "尼罗河体验",
+    note: "原文已列出该体验，但尚未补充码头、时间与价格，先作为待完善的备选项目保留。",
     images: []
   },
   {
     name: "考姆翁布神庙",
     city: "考姆翁布",
+    date: "5 月 4 日",
+    tag: "神庙 · 顺路",
     note: "卢克索到阿斯旺路上顺访，不建议专程折返。",
     images: [
       "https://cdn.nlark.com/yuque/0/2026/png/21411456/1776585888810-7c2d9e0b-ed95-48bd-83e7-780102f3bb31.png",
@@ -356,6 +392,8 @@ const spots = [
   {
     name: "阿斯旺尼罗河下午茶",
     city: "阿斯旺",
+    date: "5 月 4 日",
+    tag: "下午茶 · 观景",
     note: "15:00-16:30 光线柔和，Old Cataract 复古，Freya Garden 性价比高。",
     images: [
       "https://cdn.nlark.com/yuque/0/2026/png/21411456/1776587044039-cb5d3291-30e5-43c8-adb2-477797ede8fb.png",
@@ -365,25 +403,38 @@ const spots = [
   {
     name: "阿斯旺落日巡航",
     city: "阿斯旺",
+    date: "5 月 4 日",
+    tag: "帆船 · 日落",
     note: "16:30 出发，17:00-18:10 适合帆船日落。",
     images: ["https://cdn.nlark.com/yuque/0/2026/png/21411456/1776587909650-013f51a0-b8b3-4782-9554-fbd13afdbc01.png"]
   },
   {
     name: "阿布辛贝神庙",
     city: "阿布辛贝",
+    date: "5 月 5 日",
+    tag: "神庙",
     note: "远但震撼，适合早起冲刺，当天行车压力最大。",
     images: []
   },
   {
     name: "胡夫金字塔",
     city: "吉萨",
-    note: "重点安排六塔重叠机位和 Mena House 绿洲视角。",
+    date: "5 月 7 日",
+    tag: "金字塔 · 拍照",
+    note: "重点安排游览路线和六塔重叠机位，控制时间后继续北上马特鲁港。",
     images: [
       "https://cdn.nlark.com/yuque/0/2025/png/21411456/1759128126477-13cd4be2-e571-48a6-9a07-763b021719eb.png",
       "https://cdn.nlark.com/yuque/0/2025/png/21411456/1759128170812-9b0e7564-5c11-438c-aff8-6d60c58aa7f3.png",
-      "https://cdn.nlark.com/yuque/0/2025/png/21411456/1759128182834-a008377b-e271-43c5-9c52-323396fee1ca.png",
-      "https://cdn.nlark.com/yuque/0/2025/png/21411456/1759397442011-6fe960bc-518f-4698-b458-f7dfcdf00e96.png"
+      "https://cdn.nlark.com/yuque/0/2025/png/21411456/1759128182834-a008377b-e271-43c5-9c52-323396fee1ca.png"
     ]
+  },
+  {
+    name: "万豪米娜宫绿洲金字塔机位",
+    city: "吉萨",
+    date: "5 月 7 日",
+    tag: "拍照点",
+    note: "Marriott Mena House 的绿洲金字塔视角，和胡夫金字塔同日安排。",
+    images: ["https://cdn.nlark.com/yuque/0/2025/png/21411456/1759397442011-6fe960bc-518f-4698-b458-f7dfcdf00e96.png"]
   }
 ];
 
@@ -623,11 +674,16 @@ function render() {
     `)
     .join("");
 
+  document.querySelector("#spotCount").textContent = `${spots.length} 项`;
   document.querySelector("#spotList").innerHTML = spots
     .map((spot) => `
       <article class="spot-card">
         ${renderSpotImages(spot)}
-        <div class="spot-meta">${spot.city}</div>
+        <div class="spot-meta">
+          <span>${spot.city}</span>
+          <span>${spot.date}</span>
+          <span>${spot.tag}</span>
+        </div>
         <h3>${spot.name}</h3>
         <p>${spot.note}</p>
       </article>
