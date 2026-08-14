@@ -482,6 +482,66 @@ h3 {
   text-align: center;
 }
 
+.lodging-booking-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.lodging-booking-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 34px;
+  padding: 7px 11px;
+  border: 1px solid currentColor;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 760;
+  line-height: 1;
+  text-decoration: none;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.lodging-booking-link span {
+  font-size: 13px;
+}
+
+.booking-provider {
+  color: #07559a;
+  background: #eef7ff;
+}
+
+.trip-provider {
+  color: #326442;
+  background: #f0f7ed;
+}
+
+.lodging-booking-link:hover,
+.lodging-booking-link:focus-visible {
+  color: white;
+  background: var(--blue);
+  outline: none;
+}
+
+.trip-provider:hover,
+.trip-provider:focus-visible {
+  background: var(--green);
+}
+
+.lodging-booking-links--compact {
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.lodging-booking-links--compact .lodging-booking-link {
+  min-height: 30px;
+  padding: 6px 8px;
+  font-size: 11px;
+}
+
 .spot-card {
   display: grid;
   gap: 8px;

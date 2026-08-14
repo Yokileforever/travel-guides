@@ -227,7 +227,11 @@ const lodgings = [
     nights: "1 晚",
     lat: 27.2447,
     lng: 33.8422,
-    note: "抵达埃及后的第一晚，靠红海休整、倒时差。"
+    note: "抵达埃及后的第一晚，靠红海休整、倒时差。",
+    bookingLinks: [
+      { provider: "Booking.com", url: "https://www.booking.com/hotel/eg/sunny-days-palma-de-mirette.html" },
+      { provider: "Trip.com", url: "https://www.trip.com/hotels/hurghada-hotel-detail-3042800/sunny-days-palma-de-mirette-resort-and-spa/" }
+    ]
   },
   {
     name: "卢克索娜芙蒂蒂酒店",
@@ -236,7 +240,11 @@ const lodgings = [
     nights: "共 3 晚",
     lat: 25.7006,
     lng: 32.6410,
-    note: "卢克索核心落脚点，方便安排东岸神庙和西岸行程。"
+    note: "卢克索核心落脚点，方便安排东岸神庙和西岸行程。",
+    bookingLinks: [
+      { provider: "Booking.com", url: "https://www.booking.com/hotel/eg/nefertiti.html" },
+      { provider: "Trip.com", url: "https://www.trip.com/hotels/luxor-hotel-detail-10717736/nefertiti-hotel-luxor/" }
+    ]
   },
   {
     name: "ASWAN NILE PALACE",
@@ -245,7 +253,11 @@ const lodgings = [
     nights: "1 晚",
     lat: 24.0839,
     lng: 32.8960,
-    note: "阿斯旺过夜点，衔接尼罗河下午茶、落日帆船和次日阿布辛贝。"
+    note: "阿斯旺过夜点，衔接尼罗河下午茶、落日帆船和次日阿布辛贝。",
+    bookingLinks: [
+      { provider: "Booking.com", url: "https://www.booking.com/hotel/eg/aswan-nile-palace-swimming-pool-rooftop-nile-view.html" },
+      { provider: "Trip.com", url: "https://www.trip.com/hotels/aswan-hotel-detail-100658684/aswan-nile-palace/" }
+    ]
   },
   {
     name: "Great Pyramid Inn",
@@ -254,7 +266,11 @@ const lodgings = [
     nights: "1 晚",
     lat: 29.9759,
     lng: 31.1378,
-    note: "靠近金字塔区，适合晚上休整和次日清晨进金字塔。"
+    note: "靠近金字塔区，适合晚上休整和次日清晨进金字塔。",
+    bookingLinks: [
+      { provider: "Booking.com", url: "https://www.booking.com/hotel/eg/great-pyramid-inn.html" },
+      { provider: "Trip.com", url: "https://www.trip.com/hotels/giza-hotel-detail-9037192/great-pyramid-inn/" }
+    ]
   },
   {
     name: "Hostmark Blue Beach Hotel",
@@ -263,7 +279,11 @@ const lodgings = [
     nights: "2 晚",
     lat: 31.3500,
     lng: 27.2634,
-    note: "地中海海岸休整两晚，作为长途返开罗前的缓冲。"
+    note: "地中海海岸休整两晚，作为长途返开罗前的缓冲。",
+    bookingLinks: [
+      { provider: "Booking.com", url: "https://www.booking.com/hotel/eg/host-mark-blue-beach.html" },
+      { provider: "Trip.com", url: "https://www.trip.com/hotels/mersa-matruh-hotel-detail-131945346/hostmark-blue-beach-hotel/" }
+    ]
   }
 ];
 
@@ -440,6 +460,22 @@ const lodgingIcon = L.divIcon({
   iconAnchor: [17, 17]
 });
 
+function renderLodgingLinks(lodging, compact = false) {
+  return `
+    <div class="lodging-booking-links${compact ? " lodging-booking-links--compact" : ""}" aria-label="${lodging.name} 预订平台">
+      ${lodging.bookingLinks.map((link) => `
+        <a
+          class="lodging-booking-link ${link.provider === "Booking.com" ? "booking-provider" : "trip-provider"}"
+          href="${link.url}"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="在 ${link.provider} 查看 ${lodging.name}"
+        >${link.provider}<span aria-hidden="true">↗</span></a>
+      `).join("")}
+    </div>
+  `;
+}
+
 Object.entries(places).forEach(([key, place]) => {
   L.marker([place.lat, place.lng], { icon: locationIcon })
     .bindPopup(`<div class="popup-title">${place.name}</div><div class="popup-note">${place.note}</div>`)
@@ -452,6 +488,7 @@ lodgings.forEach((lodging, index) => {
       <div class="popup-kicker">${lodging.city} · ${lodging.dates}</div>
       <div class="popup-title">${lodging.name}</div>
       <div class="popup-note">${lodging.nights}｜${lodging.note}</div>
+      ${renderLodgingLinks(lodging, true)}
     `)
     .addTo(lodgingLayer);
   marker.lodgingIndex = index;
@@ -553,6 +590,7 @@ function render() {
         <div class="tag-row">
           <span class="tag">${lodging.dates}</span>
         </div>
+        ${renderLodgingLinks(lodging)}
       </article>
     `)
     .join("");
@@ -758,6 +796,7 @@ document.querySelectorAll(".tab-button").forEach((button) => {
 });
 
 document.querySelector("#lodgingList").addEventListener("click", (event) => {
+  if (event.target.closest(".lodging-booking-link")) return;
   const card = event.target.closest(".lodging-card");
   if (!card) return;
   focusLodging(Number(card.dataset.lodging));
