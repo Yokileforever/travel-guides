@@ -277,7 +277,7 @@ h3 {
   top: 0;
   z-index: 20;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 4px;
   padding: 5px;
   border-radius: 8px;
@@ -314,6 +314,7 @@ h3 {
 
 .flow-item,
 .day-card,
+.lodging-card,
 .spot-card,
 .prep-group,
 .tips-grid article {
@@ -345,6 +346,7 @@ h3 {
 }
 
 .tips-grid,
+.lodging-list,
 .spot-list,
 .prep-list {
   display: grid;
@@ -381,7 +383,9 @@ h3 {
 }
 
 .day-card:hover,
-.day-card.active {
+.day-card.active,
+.lodging-card:hover,
+.lodging-card.active {
   border-color: var(--green);
   transform: translateY(-1px);
 }
@@ -433,6 +437,49 @@ h3 {
   background: #edf3e8;
   color: #3c604d;
   font-size: 12px;
+}
+
+.lodging-card {
+  padding: 16px;
+  cursor: pointer;
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.lodging-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: start;
+}
+
+.lodging-city {
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 780;
+}
+
+.lodging-card h3 {
+  margin-bottom: 10px;
+  line-height: 1.25;
+}
+
+.lodging-card p {
+  margin-bottom: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.lodging-nights {
+  flex: 0 0 auto;
+  max-width: 86px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  color: white;
+  background: var(--gold);
+  font-size: 12px;
+  font-weight: 760;
+  line-height: 1.25;
+  text-align: center;
 }
 
 .spot-card {
@@ -542,6 +589,11 @@ h3 {
   background: var(--blue);
 }
 
+.map-toolbar button[aria-pressed="true"] {
+  outline: 2px solid rgba(255, 255, 255, 0.9);
+  outline-offset: -4px;
+}
+
 .map-legend {
   position: absolute;
   top: 18px;
@@ -618,6 +670,35 @@ h3 {
   font-weight: 850;
 }
 
+.lodging-pin span {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 3px solid white;
+  border-radius: 50%;
+  color: white;
+  background: var(--gold);
+  box-shadow: 0 4px 12px rgba(38, 45, 37, 0.3);
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.lodging-pin span::after {
+  position: absolute;
+  right: 2px;
+  bottom: -4px;
+  width: 9px;
+  height: 9px;
+  border-right: 3px solid white;
+  border-bottom: 3px solid white;
+  background: var(--gold);
+  content: "";
+  transform: rotate(45deg);
+}
+
 .map-status {
   position: absolute;
   left: 18px;
@@ -637,6 +718,13 @@ h3 {
 .popup-title {
   margin-bottom: 4px;
   font-weight: 800;
+}
+
+.popup-kicker {
+  margin-bottom: 4px;
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 780;
 }
 
 .popup-note {
@@ -709,6 +797,7 @@ h3 {
   .map-toolbar button {
     flex: 1;
     padding: 0 8px;
+    font-size: 12px;
   }
 
   .map-legend {

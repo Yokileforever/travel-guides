@@ -219,6 +219,54 @@ const flights = [
   }
 ];
 
+const lodgings = [
+  {
+    name: "Sunny Days Palma De Mirette Resort & SPA",
+    city: "赫尔格达",
+    dates: "5 月 1 日 - 5 月 2 日",
+    nights: "1 晚",
+    lat: 27.2447,
+    lng: 33.8422,
+    note: "抵达埃及后的第一晚，靠红海休整、倒时差。"
+  },
+  {
+    name: "卢克索娜芙蒂蒂酒店",
+    city: "卢克索",
+    dates: "5 月 2 日 - 5 月 4 日；5 月 5 日 - 5 月 6 日",
+    nights: "共 3 晚",
+    lat: 25.7006,
+    lng: 32.6410,
+    note: "卢克索核心落脚点，方便安排东岸神庙和西岸行程。"
+  },
+  {
+    name: "ASWAN NILE PALACE",
+    city: "阿斯旺",
+    dates: "5 月 4 日 - 5 月 5 日",
+    nights: "1 晚",
+    lat: 24.0839,
+    lng: 32.8960,
+    note: "阿斯旺过夜点，衔接尼罗河下午茶、落日帆船和次日阿布辛贝。"
+  },
+  {
+    name: "Great Pyramid Inn",
+    city: "吉萨 / 开罗",
+    dates: "5 月 6 日 - 5 月 7 日",
+    nights: "1 晚",
+    lat: 29.9759,
+    lng: 31.1378,
+    note: "靠近金字塔区，适合晚上休整和次日清晨进金字塔。"
+  },
+  {
+    name: "Hostmark Blue Beach Hotel",
+    city: "马特鲁港",
+    dates: "5 月 7 日 - 5 月 9 日",
+    nights: "2 晚",
+    lat: 31.3500,
+    lng: 27.2634,
+    note: "地中海海岸休整两晚，作为长途返开罗前的缓冲。"
+  }
+];
+
 const spots = [
   {
     name: "赫尔格达出海",
@@ -352,7 +400,10 @@ const prep = [
 
 const palette = ["#2f6f54", "#246b8f", "#bb5a43", "#aa7a22", "#7a4f8f", "#3f7d7a", "#c06135", "#596b3b", "#8e4e63", "#4776a9"];
 const allRouteKeys = days.flatMap((day) => day.route);
-const boundsPoints = [...new Set(allRouteKeys)].map((key) => [places[key].lat, places[key].lng]);
+const boundsPoints = [
+  ...[...new Set(allRouteKeys)].map((key) => [places[key].lat, places[key].lng]),
+  ...lodgings.map((lodging) => [lodging.lat, lodging.lng])
+];
 
 const map = L.map("map", {
   zoomControl: false,
@@ -367,11 +418,13 @@ L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map
 }).addTo(map);
 
 const markerLayer = L.layerGroup().addTo(map);
+const lodgingLayer = L.layerGroup().addTo(map);
 const fallbackLayer = L.layerGroup().addTo(map);
 const routeLayer = L.layerGroup().addTo(map);
 const labelLayer = L.layerGroup().addTo(map);
 const fallbackRoutes = [];
 const osmRoutes = [];
+const lodgingMarkers = [];
 
 const locationIcon = L.divIcon({
   className: "location-pin",
@@ -380,10 +433,29 @@ const locationIcon = L.divIcon({
   iconAnchor: [8, 8]
 });
 
+const lodgingIcon = L.divIcon({
+  className: "lodging-pin",
+  html: '<span>住</span>',
+  iconSize: [34, 34],
+  iconAnchor: [17, 17]
+});
+
 Object.entries(places).forEach(([key, place]) => {
   L.marker([place.lat, place.lng], { icon: locationIcon })
     .bindPopup(`<div class="popup-title">${place.name}</div><div class="popup-note">${place.note}</div>`)
     .addTo(markerLayer);
+});
+
+lodgings.forEach((lodging, index) => {
+  const marker = L.marker([lodging.lat, lodging.lng], { icon: lodgingIcon })
+    .bindPopup(`
+      <div class="popup-kicker">${lodging.city} · ${lodging.dates}</div>
+      <div class="popup-title">${lodging.name}</div>
+      <div class="popup-note">${lodging.nights}｜${lodging.note}</div>
+    `)
+    .addTo(lodgingLayer);
+  marker.lodgingIndex = index;
+  lodgingMarkers.push(marker);
 });
 
 days.forEach((day, index) => {
@@ -467,6 +539,24 @@ function render() {
     `)
     .join("");
 
+  document.querySelector("#lodgingList").innerHTML = lodgings
+    .map((lodging, index) => `
+      <article class="lodging-card" data-lodging="${index}">
+        <div class="lodging-top">
+          <div>
+            <div class="lodging-city">${lodging.city}</div>
+            <h3>${lodging.name}</h3>
+          </div>
+          <span class="lodging-nights">${lodging.nights}</span>
+        </div>
+        <p>${lodging.note}</p>
+        <div class="tag-row">
+          <span class="tag">${lodging.dates}</span>
+        </div>
+      </article>
+    `)
+    .join("");
+
   document.querySelector("#spotList").innerHTML = spots
     .map((spot) => `
       <article class="spot-card">
@@ -543,6 +633,18 @@ function focusDay(index) {
     map.fitBounds(latlngs, { padding: [70, 70] });
   }
   highlightDay(index);
+}
+
+function focusLodging(index) {
+  const lodging = lodgings[index];
+  if (!lodging) return;
+  lodgingLayer.addTo(map);
+  document.querySelector("#toggleLodgingButton").setAttribute("aria-pressed", "true");
+  map.setView([lodging.lat, lodging.lng], 13);
+  lodgingMarkers[index]?.openPopup();
+  document.querySelectorAll(".lodging-card").forEach((card) => {
+    card.classList.toggle("active", Number(card.dataset.lodging) === index);
+  });
 }
 
 function shortDate(dateText) {
@@ -655,6 +757,12 @@ document.querySelectorAll(".tab-button").forEach((button) => {
   focusDay(Number(card.dataset.day));
 });
 
+document.querySelector("#lodgingList").addEventListener("click", (event) => {
+  const card = event.target.closest(".lodging-card");
+  if (!card) return;
+  focusLodging(Number(card.dataset.lodging));
+});
+
 document.querySelector("#mapLegend").addEventListener("click", (event) => {
   const item = event.target.closest(".legend-item");
   if (!item) return;
@@ -663,6 +771,16 @@ document.querySelector("#mapLegend").addEventListener("click", (event) => {
 
 document.querySelector("#fitRouteButton").addEventListener("click", () => {
   map.fitBounds(boundsPoints, { padding: [45, 45] });
+});
+
+document.querySelector("#toggleLodgingButton").addEventListener("click", (event) => {
+  const enabled = map.hasLayer(lodgingLayer);
+  if (enabled) {
+    map.removeLayer(lodgingLayer);
+  } else {
+    lodgingLayer.addTo(map);
+  }
+  event.currentTarget.setAttribute("aria-pressed", String(!enabled));
 });
 
 document.querySelector("#loadRoutesButton").addEventListener("click", loadOsmRoutes);
