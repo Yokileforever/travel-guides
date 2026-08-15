@@ -139,7 +139,7 @@ Add verified booking and pricing fields when available:
 - Always keep fallback polylines from coordinates because OSRM can fail or rate-limit.
 - Add a route legend and labels such as `5/1`, `5/2`; clicking a legend item should focus/highlight the day.
 - When flights exist, resolve each IATA code to a verified airport coordinate and render flight routes in a dedicated `flightLayer` plus airport markers in `airportLayer`. Use great-circle interpolation or another documented geodesic implementation; do not use OSRM for air travel.
-- Keep the default bounds focused on the destination itinerary. Add a visible `查看航班` action and separate flight legend entries that fit the selected flight bounds with enough overlay padding to keep airport endpoints visible.
+- Keep the default bounds focused on the destination itinerary. Add a visible `航班` layer toggle that synchronizes `flightLayer` and `airportLayer`; turning it off hides both and returns to the ground route, while turning it on fits the flight bounds. Separate flight legend entries must restore hidden flight layers before focusing the selected corridor.
 - Group reciprocal flights into one visual corridor when they share the same airport pair, while listing every flight number and direction in the popup. State that the route is illustrative and not a real-time track.
 - Add lodging markers as their own layer (`lodgingLayer` or `hotelLayer`) when hotel coordinates exist. Use a visually distinct marker such as `住`/hotel icon, show them by default, and provide a toggle if the toolbar already has map controls.
 - If adding a lodging list/tab, clicking a lodging card should `setView`/focus the marker and open its popup.
@@ -152,7 +152,7 @@ Add verified booking and pricing fields when available:
 
 - If adding a new module, check that it can be hidden/omitted without leaving empty UI shells.
 - Flight cards: show flight number, airport codes, city/terminal, departure/arrival dates and times, and duration.
-- Flight maps: verify every flight code resolves to an airport marker, each unique corridor is visible and clickable, shared outbound/return corridors list both flights, map overlay padding keeps both endpoints visible, and ground-route focus restores the normal legend.
+- Flight maps: verify every flight code resolves to an airport marker, each unique corridor is visible and clickable, shared outbound/return corridors list both flights, map overlay padding keeps both endpoints visible, and ground-route focus restores the normal legend. Test initial, hidden, and legend-restored states; airport markers, route lines, and `aria-pressed` must change together.
 - Itinerary cards: distance badges must be small and must not cover body text.
 - Lodging cards: show city, hotel name, dates/nights, and a short practical note; make badges compact so they do not cover long hotel names.
 - Lodging cards: show booked/reference price state and verified platform links when available. Long names, price pills, and link buttons must wrap without overlap.

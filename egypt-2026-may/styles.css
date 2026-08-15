@@ -847,6 +847,10 @@ h3 {
   outline-offset: -4px;
 }
 
+.map-toolbar button[aria-pressed="false"] {
+  opacity: 0.56;
+}
+
 .map-legend {
   position: absolute;
   top: 18px;

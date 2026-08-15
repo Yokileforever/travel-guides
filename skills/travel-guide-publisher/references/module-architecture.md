@@ -212,7 +212,7 @@ Recommended future controls:
 
 - Day filter: focus/highlight a single day.
 - Category filter: toggle attractions, hotels, flight routes, airports, food, photo spots.
-- Flight focus: fit a selected geodesic flight corridor without including distant airports in the default local-itinerary bounds.
+- Flight layer toggle: synchronize `flightLayer` and `airportLayer`; hide/show both together, restore them when a flight legend item is chosen, and keep distant airports out of the default local-itinerary bounds.
 - Route source selector: fallback straight segments, OSRM driving route, imported GeoJSON/GPX.
 - Basemap selector: Esri Topographic, OpenStreetMap, satellite imagery if requested.
 

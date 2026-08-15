@@ -628,6 +628,7 @@ flightRouteGroups.forEach((group, index) => {
   const to = airports[group.to];
   const flightDetails = group.flights.map((flight) => `${flight.flightNo} · ${flight.direction} · ${flight.from.time} → ${flight.to.time}`).join("<br>");
   const line = L.polyline(greatCirclePoints(from, to), {
+    className: "flight-route-line",
     color: flightPalette[index % flightPalette.length],
     weight: 4,
     opacity: 0.9,
@@ -951,6 +952,7 @@ function focusFlightRoute(index) {
   const group = flightRouteGroups[index];
   const line = flightRouteLines[index];
   if (!group || !line) return;
+  setFlightLayersVisible(true);
   document.querySelector("#mapLegend").classList.add("map-legend--flight-focus");
   map.fitBounds(line.getBounds(), getFlightMapFitOptions());
   line.openPopup(line.getBounds().getCenter());
@@ -960,6 +962,14 @@ function focusFlightRoute(index) {
 function getFlightMapFitOptions() {
   if (map.getSize().x >= 620) return getMapFitOptions(4);
   return { paddingTopLeft: [34, 110], paddingBottomRight: [34, 50], maxZoom: 4 };
+}
+
+function setFlightLayersVisible(visible) {
+  [flightLayer, airportLayer].forEach((layer) => {
+    if (visible && !map.hasLayer(layer)) layer.addTo(map);
+    if (!visible && map.hasLayer(layer)) map.removeLayer(layer);
+  });
+  document.querySelector("#toggleFlightsButton").setAttribute("aria-pressed", String(visible));
 }
 
 function focusLodging(index) {
@@ -1147,10 +1157,18 @@ document.querySelector("#fitRouteButton").addEventListener("click", () => {
   document.querySelector("#mapStatus").textContent = "显示埃及自驾全程 · 实线为已加载路线，虚线为备用路线";
 });
 
-document.querySelector("#fitFlightsButton").addEventListener("click", () => {
-  document.querySelector("#mapLegend").classList.add("map-legend--flight-focus");
-  map.fitBounds(flightBounds, getFlightMapFitOptions());
-  document.querySelector("#mapStatus").textContent = "显示往返航班 · 航线为球面示意，不代表实时轨迹";
+document.querySelector("#toggleFlightsButton").addEventListener("click", () => {
+  const visible = map.hasLayer(flightLayer);
+  setFlightLayersVisible(!visible);
+  if (visible) {
+    document.querySelector("#mapLegend").classList.remove("map-legend--flight-focus");
+    map.fitBounds(boundsPoints, getMapFitOptions());
+    document.querySelector("#mapStatus").textContent = "已隐藏航班图层 · 当前显示埃及自驾路线";
+  } else {
+    document.querySelector("#mapLegend").classList.add("map-legend--flight-focus");
+    map.fitBounds(flightBounds, getFlightMapFitOptions());
+    document.querySelector("#mapStatus").textContent = "已显示往返航班 · 航线为球面示意，不代表实时轨迹";
+  }
 });
 
 document.querySelector("#toggleLodgingButton").addEventListener("click", (event) => {
