@@ -12,7 +12,7 @@
 .tab-button.active{border-color:var(--pine);color:#fff;background:var(--pine);box-shadow:0 8px 18px rgba(31,91,70,.28);transform:translateY(-1px)}
 .tab-button.active::after{width:26px;opacity:1}
 .tab-button:focus-visible{outline:3px solid rgba(191,119,37,.35);outline-offset:2px}
-.tab-number{color:var(--amber);font-size:9px;font-weight:900;letter-spacing:.08em}
-.tab-button.active .tab-number{color:#f7d79a}
+.tab-icon{flex:0 0 auto;font-family:"Apple Color Emoji","Segoe UI Emoji",sans-serif;font-size:15px;line-height:1;transition:transform .18s ease}
+.tab-button.active .tab-icon{transform:scale(1.1)}
 .tab-text{overflow:hidden;font-size:14px;text-overflow:ellipsis;white-space:nowrap}
-@media(max-width:520px){.tabs{top:4px;gap:4px;padding:5px}.tab-button{min-height:44px;padding:7px 5px}.tab-number{display:none}.tab-text{font-size:13px}}
+@media(max-width:520px){.tabs{top:4px;gap:4px;padding:5px}.tab-button{min-height:44px;gap:5px;padding:7px 5px}.tab-icon{font-size:14px}.tab-text{font-size:13px}}
