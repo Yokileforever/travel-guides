@@ -1,5 +1,15 @@
 # Implementation Checklist
 
+## Contents
+
+- [Source Ingestion](#source-ingestion)
+- [Travel Data Model](#travel-data-model)
+- [Map Defaults](#map-defaults)
+- [Visual Checks](#visual-checks)
+- [GitHub Pages Workflow](#github-pages-workflow)
+- [Recommended Trip Slugs](#recommended-trip-slugs)
+- [Final Response](#final-response)
+
 ## Source Ingestion
 
 - Yuque doc URL shape: `https://www.yuque.com/<namespace>/<repo>/<slug>?...`
@@ -11,7 +21,7 @@
 
 ## Travel Data Model
 
-Prefer modular data. Start with `flights`, `days`, `places`, `spots`, and `prep`; add `lodgings` whenever the source mentions hotels/accommodation. Add `tripCalendar` when leave planning or holiday/weekend context matters. Add optional arrays such as `budget`, `weather`, `tickets`, `food`, `drivingNotes`, or `photoSpots` only when source content or the user asks for them.
+Prefer modular data. Start with `flights`, `days`, `places`, `spots`, and `prep`; add `travelerGroups` when people have different origins, departures, returns, or transport records, and add `lodgings` whenever the source mentions hotels/accommodation. Add `tripCalendar` when leave planning or holiday/weekend context matters. Add optional arrays such as `budget`, `weather`, `tickets`, `food`, `drivingNotes`, or `photoSpots` only when source content or the user asks for them.
 
 Before implementation, build a lightweight coverage ledger from the source:
 
@@ -21,7 +31,7 @@ Before implementation, build a lightweight coverage ledger from the source:
 | Named attraction/activity | `days[].activities`; also `spots` when it should have a card or map marker |
 | Scenic/driving road | `drivingNotes` and the relevant day route when used |
 | Lodging screenshot | `lodgings` with verified name, dates, status, price, links, and map point |
-| Flight/rail segment | `flights` or the applicable transport module |
+| Flight/rail segment | `flights` or the applicable transport module; link it to `travelerGroups` when travelers differ |
 | Leave/holiday plan | `tripCalendar` plus explicit span and leave counts |
 
 Mark deliberate exclusions explicitly in working notes. Before finishing, compare the ledger to the rendered modules so no heading or itinerary item disappears through manual selection.
@@ -31,6 +41,7 @@ Recommended JavaScript structures:
 ```js
 const flights = [
   {
+    groupId: "parents",
     direction: "去程",
     badge: "出发",
     date: "4 月 30 日 - 5 月 1 日",
@@ -84,6 +95,8 @@ const lodgings = [
   }
 ];
 ```
+
+For the `travelerGroups` schema, association rules, renderer, and public-name privacy guidance, read `module-architecture.md#traveler-transport-groups`.
 
 Calendar rules:
 
@@ -152,6 +165,8 @@ Add verified booking and pricing fields when available:
 
 - If adding a new module, check that it can be hidden/omitted without leaving empty UI shells.
 - Flight cards: show flight number, airport codes, city/terminal, departure/arrival dates and times, and duration.
+- Traveler transport groups: render the outer group list as one column so every group owns a full-width row; separate groups with a clear dashed boundary. Render each group's cards with a responsive `auto-fit`/`minmax` inner grid, collapsing to one column on narrow screens. Test at least one, two, and three-or-more groups; also test a long group label and a group with three-or-more transport/pending cards.
+- Traveler transport groups: confirm displayed group labels come from `travelerGroups[].label`, every grouped transport appears exactly once, source order is preserved, and no `第一组`/`第二组` text is generated from array indexes.
 - Flight maps: verify every flight code resolves to an airport marker, each unique corridor is visible and clickable, shared outbound/return corridors list both flights, map overlay padding keeps both endpoints visible, and ground-route focus restores the normal legend. Test initial, hidden, and legend-restored states; airport markers, route lines, and `aria-pressed` must change together.
 - Itinerary cards: distance badges must be small and must not cover body text.
 - Lodging cards: show city, hotel name, dates/nights, and a short practical note; make badges compact so they do not cover long hotel names.

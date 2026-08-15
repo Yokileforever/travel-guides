@@ -2,6 +2,16 @@
 
 Use this reference when extending travel-guide pages beyond the base itinerary/map/flight/spot/checklist experience.
 
+## Contents
+
+- [Principle](#principle)
+- [Suggested Top-Level Data Shape](#suggested-top-level-data-shape)
+- [Section Navigation](#section-navigation)
+- [Common Modules](#common-modules)
+- [Map Extension Points](#map-extension-points)
+- [Rendering Pattern](#rendering-pattern)
+- [Validation For New Modules](#validation-for-new-modules)
+
 ## Principle
 
 Add features as modules with:
@@ -22,6 +32,7 @@ const trip = {
   dates: { start: "2026-04-30", end: "2026-05-10" },
   modules: {
     flights: true,
+    travelerGroups: true,
     calendar: true,
     itinerary: true,
     map: true,
@@ -61,6 +72,71 @@ const guideTabs = [
 - Synchronize active classes with `aria-selected`, roving `tabindex`, and the visible `tabpanel`; support ArrowLeft, ArrowRight, Home, and End.
 
 ## Common Modules
+
+### Traveler Transport Groups
+
+Use when travelers start from different cities, take different outbound or return trips, or otherwise need separate transport records. Keep group identity separate from flight data so the same renderer scales from one group to many.
+
+Suggested fields:
+
+```js
+const travelerGroups = [
+  {
+    id: "parents",
+    label: "父母",
+    origin: "长沙出发",
+    note: "抵达后与其他同行人会合",
+    pendingItems: ["返程航班待补"]
+  },
+  {
+    id: "dongyu-he-yali",
+    label: "东嵎、何亚莉",
+    origin: "杭州出发",
+    note: "上午先抵达目的地",
+    pendingItems: []
+  }
+];
+
+const flights = [
+  {
+    groupId: "parents",
+    direction: "去程",
+    flightNo: "FM7246",
+    from: { code: "CSX", city: "长沙", time: "11:30" },
+    to: { code: "CGQ", city: "长春", time: "14:55" }
+  }
+];
+```
+
+Data rules:
+
+- Use stable, unique `id` values for joins and user-facing `label` values for headings. Prefer names, family roles, or approved aliases over array-derived labels such as `第一组` and `第二组`.
+- Link every grouped flight or other transport record with `groupId`. Preserve group display order with the `travelerGroups` array; do not encode order into the ID.
+- Store unknown return trips, missing flight details, and other unresolved facts in `pendingItems[]`. Do not add bespoke fields such as `parentsReturnPending`.
+- Allow one group to have zero or many transport records. Render a zero-record group only when its note or pending items provide useful information.
+- On public pages, treat names as personal information and use roles or aliases unless publication is approved.
+
+Rendering pattern:
+
+```js
+function renderTravelerGroups() {
+  return travelerGroups.map(group => {
+    const groupFlights = flights.filter(flight => flight.groupId === group.id);
+    return renderTravelerGroup(group, groupFlights);
+  }).join("");
+}
+```
+
+- Render the outer group list as a single-column grid. Every group spans the full available width and has a dashed boundary or separator.
+- Render transport and pending cards inside the group with a responsive grid such as `repeat(auto-fit, minmax(min(100%, 220px), 1fr))`; collapse to one column on narrow screens.
+- Use the same template for every group. Never branch on group count, array index, label text, or a specific person.
+- Put the group label and origin in a shared header, add an accessible label such as `${group.label} 航班`, and allow long labels to wrap without covering the origin.
+
+Validation:
+
+- Check group IDs are unique and each `groupId` resolves to one group.
+- Check each grouped transport record renders exactly once and groups remain in source order.
+- Test one, two, and three-or-more groups, plus a long label and several cards in one group, at wide and narrow widths.
 
 ### Leave Calendar
 
@@ -230,6 +306,7 @@ Use one render function per module:
 
 ```js
 function renderFlights() {}
+function renderTravelerGroups() {}
 function renderCalendar() {}
 function renderItinerary() {}
 function renderLodgings() {}

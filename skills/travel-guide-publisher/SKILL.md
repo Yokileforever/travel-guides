@@ -24,6 +24,7 @@ When a user reports a defect in an existing guide and also asks to improve this 
 
 2. **Extract trip model**
    - Build structured data for flights, dates, routes, places, attractions, hotels, activities, preparation items, and notes.
+   - When travelers have different origins, departures, returns, or transport records, add a `travelerGroups` array with stable IDs and link each flight through `groupId`. Use meaningful labels such as names or roles instead of ordinal labels such as `第一组`; never hard-code a two-group limit. Read `references/module-architecture.md` for the scalable schema and renderer.
    - Add a `tripCalendar` module when the trip crosses workdays, public holidays, adjusted workdays, or weekends, or when the user asks how many leave days are needed.
    - Verify holiday and adjusted-workday classifications against an authoritative schedule for the exact year and jurisdiction. Never infer official holiday status from weekday alone.
    - Keep inclusive calendar span, itinerary-day count, overnight count, and personal leave-day count as separate values. Use “天跨度” when the headline describes an inclusive date range rather than full sightseeing days.
@@ -39,6 +40,7 @@ When a user reports a defect in an existing guide and also asks to improve this 
    - Prefer a static HTML/CSS/JS app unless the existing repo has a framework.
    - Use actual usable guide UI as the first screen, not a marketing landing page.
    - Include: overview, flight cards, daily itinerary, lodging/accommodation points when present, attractions with images, preparation checklist, and an interactive map.
+   - Render traveler transport groups from data: each group occupies one full-width row with a clear dashed boundary, while its transport cards use a responsive inner grid. Support any number of groups and cards without index-specific markup.
    - When flights and airport coordinates are available, add dedicated flight-route and airport layers, a flight legend, and one synchronized layer toggle that can show/focus or hide both layers without changing the default local-itinerary view.
    - When `tripCalendar` is enabled, render a compact time-off section after the summary/stats and before flight cards, with an explicit date range and a headline such as `请 3 天，串起 11 天跨度`.
    - Reuse the same calendar data shape, badge semantics, responsive layout, and visual language across every guide in a collection unless a guide-specific design clearly requires adaptation.
@@ -76,6 +78,7 @@ When a user reports a defect in an existing guide and also asks to improve this 
 - Make section tabs unmistakable: give inactive items a visible surface and boundary, and use a high-contrast fill plus a secondary indicator for the active item. Do not combine numeric prefixes and emoji in compact tabs.
 - Implement tab navigation with `tablist`/`tab`/`tabpanel`, synchronized `aria-selected` and `tabindex`, and Arrow/Home/End keyboard switching. Keep labels stable in one row when space permits and a balanced grid on narrow screens.
 - Use stable dimensions for map, cards, route labels, image strips, and badges.
+- Label traveler groups with the user-facing name or role people recognize. Keep each group visually self-contained and let long labels, several groups, and several transport cards wrap without overlap; stack cards on narrow screens.
 - Do not let tags, distance pills, or image previews overlap text.
 - Keep route/date identity visible on the map with labels or legend.
 - Treat a time-off calendar as an optional module, not hand-written hero copy. Distinguish `工作日`, `请假`, `法定假期`, `调休上班`, and `周末` with text as well as color. Show a compact `请` badge on every leave day and a compact `假` badge on every official holiday or weekend; do not rely on the tile background alone.

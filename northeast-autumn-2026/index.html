@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#6f3c24">
+    <title>国庆东北秋景自驾 · 吉进辽出攻略</title>
+    <link rel="stylesheet" href="./vendor/leaflet/leaflet.css">
+    <link rel="stylesheet" href="./styles.css?v=20260815-tab-emoji">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="guide-panel" aria-label="东北秋景自驾旅行攻略">
+        <header class="hero">
+          <a class="back-link" href="../">← 全部攻略</a>
+          <p class="eyebrow">Jilin → Liaoning · Autumn Road Trip</p>
+          <h1>国庆东北秋景自驾</h1>
+          <p class="summary">长春落地，从露水河、长白山南坡沿 G331 南下，经白山、花山溪谷、四海龙湾与桓仁抵达沈阳，追一条由金黄森林渐变到辽东红枫的路线。</p>
+          <div class="stats"><span><strong>7</strong> 天跨度</span><span><strong>6</strong> 晚</span><span><strong>0</strong> 天请假</span><span><strong>吉进辽出</strong> 自驾</span></div>
+          <section class="trip-calendar-shell" aria-labelledby="tripCalendarTitle">
+            <div class="trip-calendar-heading">
+              <div>
+                <p class="calendar-kicker">TIME OFF PLAN</p>
+                <h2 id="tripCalendarTitle">不用请假，串起 7 天跨度</h2>
+              </div>
+              <span class="calendar-range">10.1—10.7</span>
+            </div>
+            <div id="tripCalendar" class="trip-calendar"></div>
+            <div class="calendar-legend" aria-label="日期类型图例">
+              <span><i class="legend-dot holiday-dot"></i>法定假期</span>
+              <span><i class="legend-dot weekend-dot"></i>周末</span>
+            </div>
+          </section>
+          <div id="flightSummary" class="flight-summary"></div>
+        </header>
+
+        <nav class="tabs" aria-label="攻略导航" role="tablist">
+          <button class="tab-button active" id="tab-overview" data-view="overview" role="tab" aria-controls="overview" aria-selected="true"><span class="tab-icon" aria-hidden="true">🧭</span><span class="tab-text">总览</span></button>
+          <button class="tab-button" id="tab-plan" data-view="plan" role="tab" aria-controls="plan" aria-selected="false" tabindex="-1"><span class="tab-icon" aria-hidden="true">📅</span><span class="tab-text">日程</span></button>
+          <button class="tab-button" id="tab-lodging" data-view="lodging" role="tab" aria-controls="lodging" aria-selected="false" tabindex="-1"><span class="tab-icon" aria-hidden="true">🏨</span><span class="tab-text">住宿</span></button>
+          <button class="tab-button" id="tab-spots" data-view="spots" role="tab" aria-controls="spots" aria-selected="false" tabindex="-1"><span class="tab-icon" aria-hidden="true">📍</span><span class="tab-text">景点</span></button>
+          <button class="tab-button" id="tab-driving" data-view="driving" role="tab" aria-controls="driving" aria-selected="false" tabindex="-1"><span class="tab-icon" aria-hidden="true">🚙</span><span class="tab-text">自驾</span></button>
+          <button class="tab-button" id="tab-prep" data-view="prep" role="tab" aria-controls="prep" aria-selected="false" tabindex="-1"><span class="tab-icon" aria-hidden="true">🎒</span><span class="tab-text">准备</span></button>
+        </nav>
+
+        <section class="view active" id="overview" role="tabpanel" aria-labelledby="tab-overview">
+          <h2>路线节奏</h2>
+          <div class="route-flow" id="routeFlow"></div>
+          <h2>先看这四件事</h2>
+          <div class="tips-grid">
+            <article><span>01</span><h3>第一天别低估车程</h3><p>长春接齐同行人、采购后到露水河约 300 公里；国庆拥堵会放大疲劳，设置最晚出发时间。</p></article>
+            <article><span>02</span><h3>南坡是天气牌</h3><p>提前抢分时票，同时准备“跳过南坡、直接走 G331”的雨雪停运备选。</p></article>
+            <article><span>03</span><h3>10/4 必须早</h3><p>花山溪谷和四海龙湾同日强度高，前者尽量 8 点前进，后者按最晚入园时间倒推离开。</p></article>
+            <article><span>04</span><h3>返程尚未闭环</h3><p>攻略标出了原文航班冲突；确定沈阳或长春离境前，不要锁死最后一天的接驳和还车点。</p></article>
+          </div>
+          <aside class="notice"><strong>两组同行人</strong><p>父母从长沙出发；东嵎、何亚莉从杭州出发。四人 10 月 1 日在长春会合。东嵎、何亚莉的 HU7488 返程与“辽出/沈阳落点”冲突，父母返程航班也尚未填写。</p></aside>
+        </section>
+
+        <section class="view" id="plan" role="tabpanel" aria-labelledby="tab-plan"><h2>每日安排</h2><div id="dayList" class="day-list"></div></section>
+        <section class="view" id="lodging" role="tabpanel" aria-labelledby="tab-lodging"><h2>住宿落点</h2><p class="section-note">住宿名称、房型、日期与已订总价来自原文订单截图；订单号、完整地址、联系人和订单图片不公开。点击卡片可定位住宿点。</p><div id="lodgingList" class="lodging-list"></div></section>
+        <section class="view" id="spots" role="tabpanel" aria-labelledby="tab-spots"><h2>重点景点</h2><div id="spotList" class="spot-list"></div></section>
+        <section class="view" id="driving" role="tabpanel" aria-labelledby="tab-driving"><h2>自驾公路</h2><div id="drivingList" class="driving-list"></div></section>
+        <section class="view" id="prep" role="tabpanel" aria-labelledby="tab-prep"><h2>出发前检查</h2><div id="prepList" class="prep-list"></div></section>
+      </section>
+
+      <section class="map-panel" aria-label="交互地图">
+        <div id="map"></div>
+        <div class="map-toolbar">
+          <button id="fitRouteButton" type="button">显示自驾</button>
+          <button id="toggleFlightsButton" type="button" aria-pressed="false"><span aria-hidden="true">✈</span> 航班</button>
+          <button id="loadRoutesButton" type="button">加载驾车路线</button>
+          <button id="toggleLodgingButton" type="button" aria-pressed="true">住宿点</button>
+          <button id="toggleSpotsButton" type="button" aria-pressed="true">景点</button>
+        </div>
+        <div id="mapLegend" class="map-legend"></div>
+        <div id="mapStatus" class="map-status">拓扑底图 · 虚线为离线备用路线</div>
+      </section>
+    </main>
+    <script src="./vendor/leaflet/leaflet.js"></script>
+    <script src="./app.js?v=20260815-northeast-autumn"></script>
+  </body>
+</html>
