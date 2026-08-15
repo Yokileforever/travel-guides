@@ -13,6 +13,12 @@ const flights=[
   {direction:"去程 · 9 月 22 日",flightNo:"GJ8232",from:{code:"HGH",city:"杭州 T3",time:"19:25"},to:{code:"HRB",city:"哈尔滨 T2",time:"22:40"},note:"抵达较晚，当晚只安排入住与休息。"},
   {direction:"回程 · 9 月 26 日",flightNo:"CA8330",from:{code:"JMU",city:"佳木斯",time:"19:25"},to:{code:"PVG",city:"上海浦东 T2",time:"22:30"},note:"落地后转地面交通回杭州；佳木斯还车与值机要留足时间。"}
 ];
+const airports={
+  HGH:{name:"杭州萧山国际机场",lat:30.2369,lng:120.4289},
+  HRB:{name:"哈尔滨太平国际机场",lat:45.6234,lng:126.2503},
+  JMU:{name:"佳木斯东郊机场",lat:46.8434,lng:130.4654},
+  PVG:{name:"上海浦东国际机场",lat:31.1443,lng:121.8083}
+};
 const tripCalendar=[
   {date:"22",weekday:"周二",type:"workday",label:"工作日",note:"晚间出发"},
   {date:"23",weekday:"周三",type:"leave",label:"请假",note:"自驾启程",badge:"请",badgeTitle:"需要请假"},
@@ -55,6 +61,23 @@ const prep=[
   {group:"待补信息",items:["4 家住宿的正式名称与入住确认","租车订单、异地还车规则与驾驶人证件要求","各段预计里程、实时路况与景区开放时间","哈尔滨机场到住宿、佳木斯市区到机场的接驳方案"]}
 ];
 const colors=["#a84631","#c77728","#1f6b55","#35778c","#66558f"];
+const flightColors=["#176b9c","#a84631"];
+function greatCirclePoints(from,to,steps=72){
+  const radians=value=>value*Math.PI/180;
+  const degrees=value=>value*180/Math.PI;
+  const aLat=radians(from.lat),aLng=radians(from.lng),bLat=radians(to.lat),bLng=radians(to.lng);
+  const angularDistance=2*Math.asin(Math.sqrt(Math.sin((bLat-aLat)/2)**2+Math.cos(aLat)*Math.cos(bLat)*Math.sin((bLng-aLng)/2)**2));
+  if(!angularDistance)return [[from.lat,from.lng],[to.lat,to.lng]];
+  return Array.from({length:steps+1},(_,index)=>{
+    const fraction=index/steps;
+    const a=Math.sin((1-fraction)*angularDistance)/Math.sin(angularDistance);
+    const b=Math.sin(fraction*angularDistance)/Math.sin(angularDistance);
+    const x=a*Math.cos(aLat)*Math.cos(aLng)+b*Math.cos(bLat)*Math.cos(bLng);
+    const y=a*Math.cos(aLat)*Math.sin(aLng)+b*Math.cos(bLat)*Math.sin(bLng);
+    const z=a*Math.sin(aLat)+b*Math.sin(bLat);
+    return [degrees(Math.atan2(z,Math.sqrt(x*x+y*y))),degrees(Math.atan2(y,x))];
+  });
+}
 function renderFlights(){document.querySelector("#flightSummary").innerHTML=flights.map(f=>`<article class="flight-card"><div class="flight-top"><p>${f.direction}</p><span class="flight-no">${f.flightNo}</span></div><div class="flight-route"><div class="airport"><strong>${f.from.code}</strong><span>${f.from.city}</span><small>${f.from.time}</small></div><span class="plane">✈</span><div class="airport"><strong>${f.to.code}</strong><span>${f.to.city}</span><small>${f.to.time}</small></div></div><small>${f.note}</small></article>`).join("")}
 function renderCalendar(){document.querySelector("#tripCalendar").innerHTML=tripCalendar.map(d=>`<article class="calendar-day calendar-day--${d.type}"><div class="calendar-day-top"><span>${d.weekday}</span>${d.badge?`<i class="calendar-badge calendar-badge--${d.type}" title="${d.badgeTitle}">${d.badge}</i>`:""}</div><strong>${d.date}</strong><span class="calendar-day-label">${d.label}</span><small>${d.note}</small></article>`).join("")}
 function renderBookingLinks(lodging,compact=false){return `<div class="lodging-booking-links${compact?" lodging-booking-links--compact":""}" aria-label="${lodging.name} 预订平台">${lodging.bookingLinks.map(link=>`<a class="lodging-booking-link trip-provider" href="${link.url}" target="_blank" rel="noopener noreferrer" aria-label="在 ${link.provider} 查看 ${lodging.name}"><span>${link.provider}</span><span aria-hidden="true">↗</span></a>`).join("")}</div>`}
@@ -81,15 +104,22 @@ document.querySelector(".tabs").addEventListener("keydown",event=>{
   activateTab(tabButtons[next],true);
 });
 const map=L.map("map",{zoomControl:false}).setView([47.55,129.15],7);L.control.zoom({position:"bottomleft"}).addTo(map);L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",{attribution:"Tiles © Esri · Route data © OpenStreetMap contributors",maxZoom:17}).addTo(map);
-const layers={fallback:L.layerGroup().addTo(map),route:L.layerGroup().addTo(map),labels:L.layerGroup().addTo(map),spots:L.layerGroup().addTo(map),hotels:L.layerGroup().addTo(map)};const hotelMarkers=new Map(),spotMarkers=new Map(),fallbackLines=[];
+const layers={fallback:L.layerGroup().addTo(map),route:L.layerGroup().addTo(map),labels:L.layerGroup().addTo(map),flights:L.layerGroup().addTo(map),airports:L.layerGroup().addTo(map),spots:L.layerGroup().addTo(map),hotels:L.layerGroup().addTo(map)};const hotelMarkers=new Map(),spotMarkers=new Map(),fallbackLines=[],flightLines=[];
 days.forEach((d,i)=>{const coords=d.route.map(k=>[places[k].lat,places[k].lng]);const line=L.polyline(coords,{color:colors[i],weight:4,opacity:.82,dashArray:"9 9"}).addTo(layers.fallback);fallbackLines.push(line);const mid=coords[Math.floor(coords.length/2)];L.tooltip({permanent:true,direction:"center",className:"map-label"}).setLatLng(mid).setContent(d.date.split(" ")[0]).addTo(layers.labels)});
 lodgings.forEach(l=>{const p=places[l.place],icon=L.divIcon({className:"hotel-icon",html:"住",iconSize:[28,28]});hotelMarkers.set(l.place,L.marker([p.lat,p.lng],{icon}).bindPopup(`<strong>${l.name}</strong><br>${l.dates}${renderLodgingPrice(l,true)}<br>${l.note}${renderBookingLinks(l,true)}`).addTo(layers.hotels))});
 spots.forEach(s=>{const p=places[s.place],icon=L.divIcon({className:"spot-icon",html:"景",iconSize:[27,27]});spotMarkers.set(s.place,L.marker([p.lat,p.lng],{icon}).bindPopup(`<strong>${s.name}</strong><br>${s.note}`).addTo(layers.spots))});
+Object.entries(airports).forEach(([code,airport])=>{const icon=L.divIcon({className:"airport-map-icon",html:`<span aria-hidden="true">✈</span><b>${code}</b>`,iconSize:[58,30],iconAnchor:[29,15]});L.marker([airport.lat,airport.lng],{icon,zIndexOffset:700}).bindPopup(`<strong>${code} · ${airport.name}</strong>`).addTo(layers.airports)});
+flights.forEach((flight,index)=>{const from=airports[flight.from.code],to=airports[flight.to.code];const line=L.polyline(greatCirclePoints(from,to),{color:flightColors[index%flightColors.length],weight:4,opacity:.88,dashArray:"11 8"}).bindPopup(`<strong>${flight.flightNo}</strong><br>${flight.direction}<br>${flight.from.code} ${flight.from.time} → ${flight.to.code} ${flight.to.time}<br><small>地图航线为球面示意</small>`).addTo(layers.flights);line.on("click",()=>focusFlight(index));flightLines.push(line)});
 const allBounds=L.latLngBounds(days.flatMap(d=>d.route.map(k=>[places[k].lat,places[k].lng])));map.fitBounds(allBounds.pad(.08));
-document.querySelector("#mapLegend").innerHTML=days.map((d,i)=>`<button class="legend-item" data-day="${i}"><span class="legend-swatch" style="background:${colors[i]}"></span><span>${d.date.split(" ")[0]} ${d.title}</span></button>`).join("");
-function focusDay(i){fallbackLines.forEach((l,n)=>l.setStyle({weight:n===i?7:3,opacity:n===i?1:.28}));map.fitBounds(fallbackLines[i].getBounds().pad(.25));document.querySelector("#mapStatus").textContent=`已聚焦：${days[i].date} · ${days[i].title}`}
+const flightBounds=L.latLngBounds(Object.values(airports).map(airport=>[airport.lat,airport.lng]));
+document.querySelector("#mapLegend").innerHTML=`<div class="legend-title">每日自驾</div>${days.map((d,i)=>`<button class="legend-item" data-day="${i}"><span class="legend-swatch" style="background:${colors[i]}"></span><span>${d.date.split(" ")[0]} ${d.title}</span></button>`).join("")}<div class="legend-title legend-title--flights">航班航线 · 示意</div>${flights.map((f,i)=>`<button class="legend-item" data-flight="${i}"><span class="flight-legend-swatch" style="border-color:${flightColors[i%flightColors.length]}">✈</span><span>${f.flightNo} · ${f.from.code} → ${f.to.code}</span></button>`).join("")}`;
+function focusDay(i){document.querySelector("#mapLegend").classList.remove("map-legend--flight-focus");fallbackLines.forEach((l,n)=>l.setStyle({weight:n===i?7:3,opacity:n===i?1:.28}));map.fitBounds(fallbackLines[i].getBounds().pad(.25));document.querySelector("#mapStatus").textContent=`已聚焦：${days[i].date} · ${days[i].title}`}
+function getFlightFitOptions(maxZoom=6){const wide=map.getSize().x>=620;return wide?{paddingTopLeft:[64,74],paddingBottomRight:[250,58],maxZoom}:{paddingTopLeft:[32,96],paddingBottomRight:[32,48],maxZoom}}
+function focusFlight(i){const flight=flights[i],line=flightLines[i];document.querySelector("#mapLegend").classList.add("map-legend--flight-focus");map.fitBounds(line.getBounds().pad(.2),getFlightFitOptions());line.openPopup(line.getBounds().getCenter());document.querySelector("#mapStatus").textContent=`航班：${flight.flightNo} · ${flight.from.code} → ${flight.to.code} · 球面示意航线`}
 document.querySelectorAll("[data-day]").forEach(b=>b.addEventListener("click",()=>focusDay(Number(b.dataset.day))));document.querySelectorAll(".focus-map").forEach(c=>c.addEventListener("click",()=>{const k=c.dataset.place,p=places[k],marker=hotelMarkers.get(k)||spotMarkers.get(k);map.setView([p.lat,p.lng],11);marker?.openPopup();if(innerWidth<=900)document.querySelector("#map").scrollIntoView({behavior:"smooth"})}));
-document.querySelector("#fitRouteButton").addEventListener("click",()=>{fallbackLines.forEach(l=>l.setStyle({weight:4,opacity:.82}));map.fitBounds(allBounds.pad(.08));document.querySelector("#mapStatus").textContent="显示全程 · 虚线为离线备用路线"});
+document.querySelectorAll("[data-flight]").forEach(button=>button.addEventListener("click",()=>focusFlight(Number(button.dataset.flight))));
+document.querySelector("#fitRouteButton").addEventListener("click",()=>{document.querySelector("#mapLegend").classList.remove("map-legend--flight-focus");fallbackLines.forEach(l=>l.setStyle({weight:4,opacity:.82}));map.fitBounds(allBounds.pad(.08));document.querySelector("#mapStatus").textContent="显示全程 · 虚线为离线备用路线"});
+document.querySelector("#fitFlightsButton").addEventListener("click",()=>{document.querySelector("#mapLegend").classList.add("map-legend--flight-focus");map.fitBounds(flightBounds.pad(.08),getFlightFitOptions(5));document.querySelector("#mapStatus").textContent="显示往返航班 · 航线为球面示意，不代表实时轨迹"});
 function toggleLayer(buttonId,layer){const b=document.querySelector(buttonId);b.addEventListener("click",()=>{const on=map.hasLayer(layer);on?map.removeLayer(layer):map.addLayer(layer);b.setAttribute("aria-pressed",String(!on))})}toggleLayer("#toggleLodgingButton",layers.hotels);toggleLayer("#toggleSpotsButton",layers.spots);
 async function loadRoutes(){const btn=document.querySelector("#loadRoutesButton");btn.disabled=true;btn.textContent="路线加载中…";layers.route.clearLayers();let loaded=0;for(let i=0;i<days.length;i++){const coords=days[i].route.map(k=>places[k]);if(coords.length<2)continue;try{const path=coords.map(p=>`${p.lng},${p.lat}`).join(";");const res=await fetch(`https://router.project-osrm.org/route/v1/driving/${path}?overview=full&geometries=geojson&continue_straight=false`);if(!res.ok)throw new Error("route");const data=await res.json();if(!data.routes?.[0])throw new Error("empty");L.geoJSON(data.routes[0].geometry,{style:{color:colors[i],weight:5,opacity:.95}}).addTo(layers.route);loaded++}catch(e){/* dashed fallback remains visible */}}btn.disabled=false;btn.textContent="重新加载路线";document.querySelector("#mapStatus").textContent=loaded===days.length?"已加载全部驾车路线 · OSRM / OpenStreetMap":`已加载 ${loaded}/${days.length} 天；其余保留虚线备用路线`}
 document.querySelector("#loadRoutesButton").addEventListener("click",loadRoutes);

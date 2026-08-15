@@ -199,6 +199,7 @@ Keep map implementation layer-oriented:
 ```js
 const mapLayers = {
   routeLayer: L.layerGroup(),
+  flightLayer: L.layerGroup(),
   fallbackLayer: L.layerGroup(),
   labelLayer: L.layerGroup(),
   spotLayer: L.layerGroup(),
@@ -210,7 +211,8 @@ const mapLayers = {
 Recommended future controls:
 
 - Day filter: focus/highlight a single day.
-- Category filter: toggle attractions, hotels, airports, food, photo spots.
+- Category filter: toggle attractions, hotels, flight routes, airports, food, photo spots.
+- Flight focus: fit a selected geodesic flight corridor without including distant airports in the default local-itinerary bounds.
 - Route source selector: fallback straight segments, OSRM driving route, imported GeoJSON/GPX.
 - Basemap selector: Esri Topographic, OpenStreetMap, satellite imagery if requested.
 

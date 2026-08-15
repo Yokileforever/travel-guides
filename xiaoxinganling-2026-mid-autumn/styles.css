@@ -16,3 +16,6 @@
 .tab-button.active .tab-icon{transform:scale(1.1)}
 .tab-text{overflow:hidden;font-size:14px;text-overflow:ellipsis;white-space:nowrap}
 @media(max-width:520px){.tabs{top:4px;gap:4px;padding:5px}.tab-button{min-height:44px;gap:5px;padding:7px 5px}.tab-icon{font-size:14px}.tab-text{font-size:13px}}
+
+.legend-title{padding:4px 6px;color:var(--muted);font-size:11px;font-weight:850;letter-spacing:0;text-transform:uppercase}.legend-title--flights{margin-top:5px;padding-top:9px;border-top:1px solid var(--line)}.flight-legend-swatch{display:grid;width:24px;height:18px;place-items:center;border-bottom:3px dashed;color:var(--blue);font-size:12px}.airport-map-icon{display:flex!important;align-items:center;justify-content:center;gap:4px;border:2px solid #fff;border-radius:7px;background:var(--blue);box-shadow:0 3px 10px rgba(0,0,0,.28);color:#fff;font-size:11px;font-weight:900}.airport-map-icon span{font-size:12px}.airport-map-icon b{font-size:10px;letter-spacing:0}.leaflet-interactive:focus{outline:3px solid rgba(199,119,40,.45);outline-offset:2px}
+@media(max-width:900px){.map-legend.map-legend--flight-focus{display:none}}

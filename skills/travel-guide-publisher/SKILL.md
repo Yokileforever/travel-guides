@@ -39,6 +39,7 @@ When a user reports a defect in an existing guide and also asks to improve this 
    - Prefer a static HTML/CSS/JS app unless the existing repo has a framework.
    - Use actual usable guide UI as the first screen, not a marketing landing page.
    - Include: overview, flight cards, daily itinerary, lodging/accommodation points when present, attractions with images, preparation checklist, and an interactive map.
+   - When flights and airport coordinates are available, add a dedicated flight-route layer with airport markers, a flight legend, and a control that fits the map to the air journey without changing the default local-itinerary view.
    - When `tripCalendar` is enabled, render a compact time-off section after the summary/stats and before flight cards, with an explicit date range and a headline such as `请 3 天，串起 11 天跨度`.
    - Reuse the same calendar data shape, badge semantics, responsive layout, and visual language across every guide in a collection unless a guide-specific design clearly requires adaptation.
    - For guides with several content views, use a prominent sticky tab bar. Pair each tab label with one semantically matched emoji when a friendly, highly scannable style is appropriate; keep the text label and mark the emoji `aria-hidden`.
@@ -84,6 +85,8 @@ When a user reports a defect in an existing guide and also asks to improve this 
 - Lodging cards and lodging map popups must show verified booking links and price status when the data exists. Use labels such as `已预订 · 1 晚总价` or `参考价 · 9 月 22 日入住`; never imply a live price is a paid amount.
 - Only attractions in the structured `spots` module receive attraction markers. Ensure important route waypoints that are also attractions are present in `spots`, and resolve marker collisions rather than assuming a marker is missing.
 - For maps, design for future layers: routes, places, hotels, scenic spots, airports, driving segments, day filters, category filters, and custom imported GeoJSON/GPX should be able to coexist.
+- Draw flights as geodesic or clearly labeled approximate air-route polylines in a separate layer; never send flight segments to OSRM. Give airports distinct code markers, combine reciprocal flights that share one corridor when lines would overlap, and label the map route as illustrative rather than real-time tracking.
+- Keep the initial map fitted to the local itinerary. Provide a visible `查看航班` control and flight legend entries that fit/open the selected flight route; reserve space for map overlays so neither endpoint is hidden behind the toolbar or legend. On narrow screens, collapse the large route legend while a flight is focused and restore it when returning to the ground route.
 - Use images only when they clearly belong to the attraction; remove ambiguous booking, airline, or unrelated screenshots from attraction cards.
 - If publishing publicly, remove or avoid sensitive travel data: barcodes, booking refs, ticket numbers, identity document details, phone/email, and exact private accommodation documents.
 - Treat exact leave/work dates as personal schedule data. Publish them only after the user explicitly approves public disclosure of those dates.

@@ -226,6 +226,11 @@ const flights = [
   }
 ];
 
+const airports = {
+  PVG: { name: "上海浦东国际机场", lat: 31.1443, lng: 121.8083 },
+  CAI: { name: "开罗国际机场", lat: 30.1119, lng: 31.4140 }
+};
+
 const tripCalendar = [
   { month: "4月", date: "30", weekday: "周四", type: "workday", label: "工作日", note: "深夜出发" },
   { month: "5月", date: "1", weekday: "周五", type: "holiday", label: "劳动节", note: "法定假期", badge: "假", badgeTitle: "劳动节假期" },
@@ -508,6 +513,14 @@ const prep = [
 ];
 
 const palette = ["#2f6f54", "#246b8f", "#bb5a43", "#aa7a22", "#7a4f8f", "#3f7d7a", "#c06135", "#596b3b", "#8e4e63", "#4776a9"];
+const flightPalette = ["#176b9c", "#bb5a43"];
+const flightRouteGroups = [...flights.reduce((groups, flight) => {
+  const key = [flight.from.code, flight.to.code].sort().join("-");
+  const group = groups.get(key) || { from: flight.from.code, to: flight.to.code, flights: [] };
+  group.flights.push(flight);
+  groups.set(key, group);
+  return groups;
+}, new Map()).values()];
 const allRouteKeys = days.flatMap((day) => day.route);
 const spotPlaceKeys = new Set(spots.map((spot) => spot.place));
 const boundsPoints = [
@@ -533,8 +546,11 @@ const spotLayer = L.layerGroup().addTo(map);
 const fallbackLayer = L.layerGroup().addTo(map);
 const routeLayer = L.layerGroup().addTo(map);
 const labelLayer = L.layerGroup().addTo(map);
+const flightLayer = L.layerGroup().addTo(map);
+const airportLayer = L.layerGroup().addTo(map);
 const fallbackRoutes = [];
 const osmRoutes = [];
+const flightRouteLines = [];
 const lodgingMarkers = [];
 const spotMarkers = new Map();
 
@@ -569,6 +585,57 @@ const spotIcon = L.divIcon({
   html: "<span>景</span>",
   iconSize: [32, 32],
   iconAnchor: [16, 16]
+});
+
+function greatCirclePoints(from, to, steps = 96) {
+  const radians = (value) => value * Math.PI / 180;
+  const degrees = (value) => value * 180 / Math.PI;
+  const aLat = radians(from.lat);
+  const aLng = radians(from.lng);
+  const bLat = radians(to.lat);
+  const bLng = radians(to.lng);
+  const angularDistance = 2 * Math.asin(Math.sqrt(
+    Math.sin((bLat - aLat) / 2) ** 2
+    + Math.cos(aLat) * Math.cos(bLat) * Math.sin((bLng - aLng) / 2) ** 2
+  ));
+  if (!angularDistance) return [[from.lat, from.lng], [to.lat, to.lng]];
+
+  return Array.from({ length: steps + 1 }, (_, index) => {
+    const fraction = index / steps;
+    const a = Math.sin((1 - fraction) * angularDistance) / Math.sin(angularDistance);
+    const b = Math.sin(fraction * angularDistance) / Math.sin(angularDistance);
+    const x = a * Math.cos(aLat) * Math.cos(aLng) + b * Math.cos(bLat) * Math.cos(bLng);
+    const y = a * Math.cos(aLat) * Math.sin(aLng) + b * Math.cos(bLat) * Math.sin(bLng);
+    const z = a * Math.sin(aLat) + b * Math.sin(bLat);
+    return [degrees(Math.atan2(z, Math.sqrt(x * x + y * y))), degrees(Math.atan2(y, x))];
+  });
+}
+
+Object.entries(airports).forEach(([code, airport]) => {
+  const icon = L.divIcon({
+    className: "airport-map-icon",
+    html: `<span aria-hidden="true">✈</span><b>${code}</b>`,
+    iconSize: [60, 32],
+    iconAnchor: [30, 16]
+  });
+  L.marker([airport.lat, airport.lng], { icon, zIndexOffset: 800 })
+    .bindPopup(`<div class="popup-title">${code} · ${airport.name}</div>`)
+    .addTo(airportLayer);
+});
+
+flightRouteGroups.forEach((group, index) => {
+  const from = airports[group.from];
+  const to = airports[group.to];
+  const flightDetails = group.flights.map((flight) => `${flight.flightNo} · ${flight.direction} · ${flight.from.time} → ${flight.to.time}`).join("<br>");
+  const line = L.polyline(greatCirclePoints(from, to), {
+    color: flightPalette[index % flightPalette.length],
+    weight: 4,
+    opacity: 0.9,
+    dashArray: "12 9"
+  }).bindPopup(`<div class="popup-title">${group.from} ⇄ ${group.to}</div><div class="popup-note">${flightDetails}<br><small>地图航线为球面示意</small></div>`)
+    .addTo(flightLayer);
+  line.on("click", () => focusFlightRoute(index));
+  flightRouteLines.push(line);
 });
 
 const spotClusters = [
@@ -684,6 +751,7 @@ days.forEach((day, index) => {
   }
 });
 
+const flightBounds = L.latLngBounds(Object.values(airports).map((airport) => [airport.lat, airport.lng]));
 map.fitBounds(boundsPoints, getMapFitOptions());
 refreshSpotLayer();
 map.on("zoomend", refreshSpotLayer);
@@ -820,11 +888,18 @@ function render() {
     .join("");
 
   document.querySelector("#mapLegend").innerHTML = `
-    <div class="legend-title">每日路线</div>
+    <div class="legend-title">每日自驾</div>
     ${days.map((day, index) => `
       <button class="legend-item" type="button" data-day="${index}" title="${day.title}">
         <span class="legend-date" style="background:${palette[index % palette.length]}">${shortDate(day.date)}</span>
         <span class="legend-route">${day.title}</span>
+      </button>
+    `).join("")}
+    <div class="legend-title legend-title--flights">航班航线 · 示意</div>
+    ${flightRouteGroups.map((group, index) => `
+      <button class="legend-item" type="button" data-flight-route="${index}" title="查看 ${group.from} 到 ${group.to} 航线">
+        <span class="flight-legend-swatch" style="border-color:${flightPalette[index % flightPalette.length]}">✈</span>
+        <span class="legend-route">${group.from} ⇄ ${group.to} · ${group.flights.map((flight) => flight.flightNo.replace("埃及航空 ", "")).join(" / ")}</span>
       </button>
     `).join("")}
   `;
@@ -854,6 +929,7 @@ function renderSpotImages(spot) {
 
 function focusDay(index) {
   document.querySelector("#mapLegend").classList.remove("map-legend--spot-focus");
+  document.querySelector("#mapLegend").classList.remove("map-legend--flight-focus");
   document.querySelectorAll(".day-card").forEach((card) => {
     card.classList.toggle("active", Number(card.dataset.day) === index);
   });
@@ -869,6 +945,21 @@ function focusDay(index) {
     map.fitBounds(latlngs, getMapFitOptions());
   }
   highlightDay(index);
+}
+
+function focusFlightRoute(index) {
+  const group = flightRouteGroups[index];
+  const line = flightRouteLines[index];
+  if (!group || !line) return;
+  document.querySelector("#mapLegend").classList.add("map-legend--flight-focus");
+  map.fitBounds(line.getBounds(), getFlightMapFitOptions());
+  line.openPopup(line.getBounds().getCenter());
+  document.querySelector("#mapStatus").textContent = `航班：${group.from} ⇄ ${group.to} · 球面示意航线，不代表实时轨迹`;
+}
+
+function getFlightMapFitOptions() {
+  if (map.getSize().x >= 620) return getMapFitOptions(4);
+  return { paddingTopLeft: [34, 110], paddingBottomRight: [34, 50], maxZoom: 4 };
 }
 
 function focusLodging(index) {
@@ -1042,12 +1133,24 @@ document.querySelector("#spotList").addEventListener("keydown", (event) => {
 document.querySelector("#mapLegend").addEventListener("click", (event) => {
   const item = event.target.closest(".legend-item");
   if (!item) return;
-  focusDay(Number(item.dataset.day));
+  if (item.dataset.flightRoute !== undefined) {
+    focusFlightRoute(Number(item.dataset.flightRoute));
+  } else {
+    focusDay(Number(item.dataset.day));
+  }
 });
 
 document.querySelector("#fitRouteButton").addEventListener("click", () => {
   document.querySelector("#mapLegend").classList.remove("map-legend--spot-focus");
+  document.querySelector("#mapLegend").classList.remove("map-legend--flight-focus");
   map.fitBounds(boundsPoints, getMapFitOptions());
+  document.querySelector("#mapStatus").textContent = "显示埃及自驾全程 · 实线为已加载路线，虚线为备用路线";
+});
+
+document.querySelector("#fitFlightsButton").addEventListener("click", () => {
+  document.querySelector("#mapLegend").classList.add("map-legend--flight-focus");
+  map.fitBounds(flightBounds, getFlightMapFitOptions());
+  document.querySelector("#mapStatus").textContent = "显示往返航班 · 航线为球面示意，不代表实时轨迹";
 });
 
 document.querySelector("#toggleLodgingButton").addEventListener("click", (event) => {

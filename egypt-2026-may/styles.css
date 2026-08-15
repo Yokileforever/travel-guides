@@ -868,6 +868,22 @@ h3 {
   font-weight: 760;
 }
 
+.legend-title--flights {
+  margin-top: 5px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.flight-legend-swatch {
+  display: grid;
+  width: 34px;
+  height: 21px;
+  place-items: center;
+  border-bottom: 3px dashed;
+  color: var(--blue);
+  font-size: 13px;
+}
+
 .legend-item {
   display: grid;
   grid-template-columns: 42px 1fr;
@@ -886,6 +902,25 @@ h3 {
 .legend-item:hover,
 .legend-item.active {
   background: #edf3e8;
+}
+
+.airport-map-icon {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 2px solid white;
+  border-radius: 7px;
+  background: var(--blue);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.28);
+  color: white;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.airport-map-icon b {
+  font-size: 10px;
+  letter-spacing: 0;
 }
 
 .legend-date {
@@ -1062,6 +1097,10 @@ h3 {
   .map-legend.map-legend--spot-focus {
     display: none;
   }
+
+  .map-legend.map-legend--flight-focus {
+    display: none;
+  }
 }
 
 @media (max-width: 560px) {
@@ -1103,16 +1142,17 @@ h3 {
   .map-toolbar {
     right: 12px;
     left: 12px;
+    flex-wrap: wrap;
   }
 
   .map-toolbar button {
-    flex: 1;
+    flex: 1 1 calc(33.333% - 8px);
     padding: 0 8px;
     font-size: 12px;
   }
 
   .map-legend {
-    top: 74px;
+    top: 112px;
     right: 12px;
     left: 12px;
     width: auto;
