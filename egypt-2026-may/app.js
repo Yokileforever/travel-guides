@@ -203,8 +203,19 @@ const days = [
   }
 ];
 
+const travelerGroups = [
+  {
+    id: "travel-party",
+    label: "同行二人",
+    origin: "上海浦东出发",
+    note: "同乘埃及航空直飞往返",
+    pendingItems: []
+  }
+];
+
 const flights = [
   {
+    groupId: "travel-party",
     direction: "去程",
     badge: "出发",
     date: "4 月 30 日 - 5 月 1 日",
@@ -215,6 +226,7 @@ const flights = [
     note: "抵达开罗机场后取车，直接自驾前往赫尔格达休整。"
   },
   {
+    groupId: "travel-party",
     direction: "回程",
     badge: "返程",
     date: "5 月 10 日",
@@ -760,6 +772,70 @@ requestAnimationFrame(() => map.invalidateSize());
 requestAnimationFrame(() => map.fitBounds(boundsPoints, getMapFitOptions()));
 window.addEventListener("resize", () => map.invalidateSize());
 
+function renderFlightCard(flight) {
+  const flightCode = flight.flightNo.split(" ").at(-1);
+  return `
+    <article class="flight-card">
+      <div class="flight-card-top">
+        <div>
+          <div class="flight-kicker">${flight.badge} · ${flight.date}</div>
+          <h3>${flight.direction}航班</h3>
+        </div>
+        <span class="flight-number" aria-label="${flight.flightNo}" title="${flight.flightNo}">${flightCode}</span>
+      </div>
+      <div class="flight-route">
+        <div class="airport">
+          <strong>${flight.from.code}</strong>
+          <span>${flight.from.city} ${flight.from.terminal}</span>
+          <em>${flight.from.date} ${flight.from.time}</em>
+        </div>
+        <div class="flight-line" aria-hidden="true">
+          <span></span>
+        </div>
+        <div class="airport airport-arrival">
+          <strong>${flight.to.code}</strong>
+          <span>${flight.to.city} ${flight.to.terminal}</span>
+          <em>${flight.to.date} ${flight.to.time}</em>
+        </div>
+      </div>
+      <div class="flight-detail"><span>${flight.meta}</span></div>
+      <p class="flight-note">${flight.note}</p>
+    </article>
+  `;
+}
+
+function renderTravelerGroups() {
+  const groupIds = travelerGroups.map((group) => group.id);
+  if (new Set(groupIds).size !== groupIds.length) throw new Error("Traveler group IDs must be unique");
+  const unknownFlight = flights.find((flight) => !groupIds.includes(flight.groupId));
+  if (unknownFlight) throw new Error(`Unknown traveler group: ${unknownFlight.groupId}`);
+
+  return travelerGroups.map((group) => {
+    const groupFlights = flights.filter((flight) => flight.groupId === group.id);
+    if (!groupFlights.length && !group.pendingItems.length && !group.note) return "";
+    return `
+      <section class="flight-group" aria-label="${group.label} 航班">
+        <header class="flight-group-heading">
+          <div>
+            <span class="flight-group-label">${group.label}</span>
+            <strong>${group.origin}</strong>
+          </div>
+          <small>${group.note}</small>
+        </header>
+        <div class="flight-group-list">
+          ${groupFlights.map(renderFlightCard).join("")}
+          ${group.pendingItems.map((item) => `
+            <article class="flight-pending">
+              <span>待补交通</span>
+              <strong>${item}</strong>
+            </article>
+          `).join("")}
+        </div>
+      </section>
+    `;
+  }).join("");
+}
+
 function render() {
   document.querySelector("#tripCalendar").innerHTML = tripCalendar
     .map((day) => `
@@ -775,36 +851,7 @@ function render() {
     `)
     .join("");
 
-  document.querySelector("#flightSummary").innerHTML = flights
-    .map((flight) => `
-      <article class="flight-card">
-        <div class="flight-card-top">
-          <div>
-            <div class="flight-kicker">${flight.badge} · ${flight.date}</div>
-            <h3>${flight.direction}航班</h3>
-          </div>
-          <span class="flight-number">${flight.flightNo}</span>
-        </div>
-        <div class="flight-route">
-          <div class="airport">
-            <strong>${flight.from.code}</strong>
-            <span>${flight.from.city} ${flight.from.terminal}</span>
-            <em>${flight.from.date} ${flight.from.time}</em>
-          </div>
-          <div class="flight-line" aria-hidden="true">
-            <span></span>
-          </div>
-          <div class="airport airport-arrival">
-            <strong>${flight.to.code}</strong>
-            <span>${flight.to.city} ${flight.to.terminal}</span>
-            <em>${flight.to.date} ${flight.to.time}</em>
-          </div>
-        </div>
-        <div class="flight-detail"><span>${flight.meta}</span></div>
-        <p class="flight-note">${flight.note}</p>
-      </article>
-    `)
-    .join("");
+  document.querySelector("#flightSummary").innerHTML = renderTravelerGroups();
 
   document.querySelector("#routeFlow").innerHTML = days
     .map((day) => `
@@ -1104,16 +1151,40 @@ async function loadOsmRoutes() {
 
 render();
 
-document.querySelectorAll(".tab-button").forEach((button) => {
-  button.addEventListener("click", () => {
-    document.querySelectorAll(".tab-button").forEach((item) => item.classList.remove("active"));
-    document.querySelectorAll(".view").forEach((view) => view.classList.remove("active"));
-    button.classList.add("active");
-    document.querySelector(`#${button.dataset.view}`).classList.add("active");
+const tabButtons = [...document.querySelectorAll(".tab-button")];
+
+function activateTab(button, focus = false) {
+  tabButtons.forEach((tab) => {
+    const active = tab === button;
+    tab.classList.toggle("active", active);
+    tab.setAttribute("aria-selected", String(active));
+    tab.tabIndex = active ? 0 : -1;
   });
+  document.querySelectorAll(".view").forEach((view) => {
+    const active = view.id === button.dataset.view;
+    view.classList.toggle("active", active);
+    view.hidden = !active;
+  });
+  if (focus) button.focus();
+}
+
+tabButtons.forEach((button) => button.addEventListener("click", () => activateTab(button)));
+
+document.querySelector(".tabs").addEventListener("keydown", (event) => {
+  if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+  event.preventDefault();
+  const current = tabButtons.indexOf(document.activeElement);
+  const next = event.key === "Home"
+    ? 0
+    : event.key === "End"
+      ? tabButtons.length - 1
+      : event.key === "ArrowRight"
+        ? (current + 1) % tabButtons.length
+        : (current - 1 + tabButtons.length) % tabButtons.length;
+  activateTab(tabButtons[next], true);
 });
 
-  document.querySelector("#dayList").addEventListener("click", (event) => {
+document.querySelector("#dayList").addEventListener("click", (event) => {
   const card = event.target.closest(".day-card");
   if (!card) return;
   focusDay(Number(card.dataset.day));

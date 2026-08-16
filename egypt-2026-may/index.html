@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>五一埃及自驾旅行攻略</title>
     <link rel="stylesheet" href="./vendor/leaflet/leaflet.css">
-    <link rel="stylesheet" href="./styles.css?v=20260814-spot-map">
+    <link rel="stylesheet" href="./styles.css?v=20260816-current-skill">
   </head>
   <body>
     <main class="app-shell">
@@ -26,7 +26,7 @@
             <div class="trip-calendar-heading">
               <div>
                 <p class="calendar-kicker">TIME OFF PLAN</p>
-                <h2 id="tripCalendarTitle">请 3 天，串起 11 天行程</h2>
+                <h2 id="tripCalendarTitle">请 3 天，串起 11 天跨度</h2>
               </div>
               <span class="calendar-range">4.30—5.10</span>
             </div>
@@ -41,15 +41,15 @@
           <div class="flight-summary" id="flightSummary" aria-label="往返航班"></div>
         </header>
 
-        <nav class="tabs" aria-label="攻略导航">
-          <button class="tab-button active" data-view="overview">总览</button>
-          <button class="tab-button" data-view="plan">日程</button>
-          <button class="tab-button" data-view="lodging">住宿</button>
-          <button class="tab-button" data-view="spots">景点</button>
-          <button class="tab-button" data-view="prep">准备</button>
+        <nav class="tabs" role="tablist" aria-label="攻略导航">
+          <button class="tab-button active" id="tab-overview" data-view="overview" type="button" role="tab" aria-controls="overview" aria-selected="true" tabindex="0"><span class="tab-icon" aria-hidden="true">🧭</span><span class="tab-text">总览</span></button>
+          <button class="tab-button" id="tab-plan" data-view="plan" type="button" role="tab" aria-controls="plan" aria-selected="false" tabindex="-1"><span class="tab-icon" aria-hidden="true">📅</span><span class="tab-text">日程</span></button>
+          <button class="tab-button" id="tab-lodging" data-view="lodging" type="button" role="tab" aria-controls="lodging" aria-selected="false" tabindex="-1"><span class="tab-icon" aria-hidden="true">🏨</span><span class="tab-text">住宿</span></button>
+          <button class="tab-button" id="tab-spots" data-view="spots" type="button" role="tab" aria-controls="spots" aria-selected="false" tabindex="-1"><span class="tab-icon" aria-hidden="true">📍</span><span class="tab-text">景点</span></button>
+          <button class="tab-button" id="tab-prep" data-view="prep" type="button" role="tab" aria-controls="prep" aria-selected="false" tabindex="-1"><span class="tab-icon" aria-hidden="true">🎒</span><span class="tab-text">准备</span></button>
         </nav>
 
-        <section class="view active" id="overview">
+        <section class="view active" id="overview" role="tabpanel" aria-labelledby="tab-overview">
           <h2>路线节奏</h2>
           <div class="route-flow" id="routeFlow"></div>
 
@@ -74,22 +74,22 @@
           </div>
         </section>
 
-        <section class="view" id="plan">
+        <section class="view" id="plan" role="tabpanel" aria-labelledby="tab-plan" hidden>
           <h2>每日安排</h2>
           <div class="day-list" id="dayList"></div>
         </section>
 
-        <section class="view" id="lodging">
+        <section class="view" id="lodging" role="tabpanel" aria-labelledby="tab-lodging" hidden>
           <h2>住宿点</h2>
           <div class="lodging-list" id="lodgingList"></div>
         </section>
 
-        <section class="view" id="spots">
+        <section class="view" id="spots" role="tabpanel" aria-labelledby="tab-spots" hidden>
           <h2>景点与体验 <span class="section-count" id="spotCount"></span></h2>
           <div class="spot-list" id="spotList"></div>
         </section>
 
-        <section class="view" id="prep">
+        <section class="view" id="prep" role="tabpanel" aria-labelledby="tab-prep" hidden>
           <h2>出发前检查</h2>
           <div class="prep-list" id="prepList"></div>
         </section>
@@ -110,6 +110,6 @@
     </main>
 
     <script src="./vendor/leaflet/leaflet.js"></script>
-    <script src="./app.js?v=20260815-flight-layer"></script>
+    <script src="./app.js?v=20260816-current-skill"></script>
   </body>
 </html>

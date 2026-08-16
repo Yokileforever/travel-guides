@@ -291,9 +291,119 @@ h3 {
 
 .flight-summary {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 12px;
   margin-top: 18px;
+}
+
+.flight-group {
+  display: grid;
+  min-width: 0;
+  gap: 12px;
+  padding: 12px;
+  border: 1px dashed rgba(47, 111, 84, 0.46);
+  border-radius: 8px;
+  background: rgba(235, 241, 232, 0.58);
+}
+
+.flight-group-heading {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 2px 2px 10px;
+  border-bottom: 1px dashed rgba(47, 111, 84, 0.3);
+}
+
+.flight-group-heading > div {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 9px;
+}
+
+.flight-group-label {
+  flex: 0 0 auto;
+  padding: 5px 9px;
+  border-radius: 999px;
+  color: white;
+  background: var(--green);
+  font-size: 11px;
+  font-weight: 820;
+}
+
+.flight-group-heading strong {
+  min-width: 0;
+  font-size: 14px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.flight-group-heading small {
+  flex: 0 1 auto;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 720;
+  line-height: 1.4;
+  text-align: right;
+}
+
+.flight-group-list {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 10px;
+  align-items: stretch;
+}
+
+.flight-group-list > * {
+  height: 100%;
+}
+
+.flight-group .flight-card {
+  box-shadow: none;
+}
+
+.flight-group .flight-card h3 {
+  white-space: nowrap;
+}
+
+.flight-group .flight-route {
+  grid-template-columns: minmax(0, 1fr) 42px minmax(0, 1fr);
+  gap: 7px;
+}
+
+.flight-group .airport strong {
+  font-size: 29px;
+}
+
+.flight-group .airport span,
+.flight-group .airport em {
+  font-size: 11px;
+}
+
+.flight-pending {
+  padding: 14px;
+  border: 1px dashed #cfb48e;
+  border-radius: 8px;
+  background: rgba(255, 248, 232, 0.86);
+}
+
+.flight-pending span {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 4px 7px;
+  border-radius: 999px;
+  color: #8d5524;
+  background: #f5dfbd;
+  font-size: 11px;
+  font-weight: 820;
+}
+
+.flight-pending strong {
+  display: block;
+  color: var(--coral);
 }
 
 .flight-card {
@@ -445,28 +555,93 @@ h3 {
 
 .tabs {
   position: sticky;
-  top: 0;
+  top: 8px;
   z-index: 20;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 4px;
-  padding: 5px;
+  gap: 6px;
+  padding: 7px;
+  border-color: #c8d2c8;
   border-radius: 8px;
+  background: rgba(232, 238, 232, 0.94);
+  box-shadow: 0 12px 28px rgba(27, 62, 47, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(18px);
 }
 
 .tab-button {
-  min-height: 38px;
-  border: 0;
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 8px 10px;
+  border: 1px solid rgba(47, 111, 84, 0.12);
   border-radius: 6px;
   color: var(--muted);
-  background: transparent;
+  background: rgba(255, 255, 255, 0.76);
+  box-shadow: inset 0 -1px 0 rgba(47, 111, 84, 0.06);
   cursor: pointer;
+  font-weight: 780;
+  transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.tab-button::after {
+  position: absolute;
+  right: 50%;
+  bottom: 4px;
+  width: 18px;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--gold);
+  content: "";
+  opacity: 0;
+  transform: translateX(50%);
+  transition: opacity 0.18s ease, width 0.18s ease;
+}
+
+.tab-button:hover {
+  border-color: #aebfb2;
+  color: var(--green);
+  background: white;
 }
 
 .tab-button.active {
   color: white;
   background: var(--green);
+  box-shadow: 0 8px 18px rgba(47, 111, 84, 0.28);
+  transform: translateY(-1px);
+}
+
+.tab-button.active::after {
+  width: 26px;
+  opacity: 1;
+}
+
+.tab-button:focus-visible {
+  outline: 3px solid rgba(183, 137, 57, 0.35);
+  outline-offset: 2px;
+}
+
+.tab-icon {
+  flex: 0 0 auto;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+  font-size: 15px;
+  line-height: 1;
+  transition: transform 0.18s ease;
+}
+
+.tab-button.active .tab-icon {
+  transform: scale(1.1);
+}
+
+.tab-text {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .view {
@@ -1113,7 +1288,48 @@ h3 {
   }
 
   .tabs {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px;
+    padding: 5px;
+  }
+
+  .tab-button {
+    grid-column: span 2;
+    min-height: 44px;
+    gap: 5px;
+    padding: 7px 5px;
+  }
+
+  .tab-button:nth-last-child(2) {
+    grid-column: 2 / span 2;
+  }
+
+  .tab-button:last-child {
+    grid-column: 4 / span 2;
+  }
+
+  .tab-icon {
+    font-size: 14px;
+  }
+
+  .tab-text {
+    font-size: 13px;
+  }
+
+  .flight-group {
+    padding: 9px;
+  }
+
+  .flight-group-heading {
+    align-items: flex-start;
+  }
+
+  .flight-group-heading small {
+    padding-top: 5px;
+  }
+
+  .flight-group-list {
+    grid-template-columns: 1fr;
   }
 
   .trip-calendar {
