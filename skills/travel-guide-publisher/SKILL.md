@@ -45,7 +45,7 @@ When a user reports a defect in an existing guide and also asks to improve this 
    - When `tripCalendar` is enabled, render a compact time-off section after the summary/stats and before flight cards, with an explicit date range and a headline such as `请 3 天，串起 11 天跨度`.
    - Reuse the same calendar data shape, badge semantics, responsive layout, and visual language across every guide in a collection unless a guide-specific design clearly requires adaptation.
    - For guides with several content views, use a prominent sticky tab bar. Pair each tab label with one semantically matched emoji when a friendly, highly scannable style is appropriate; keep the text label and mark the emoji `aria-hidden`.
-   - Use Leaflet for maps when requested; for this user's default style, use Leaflet 1.9.4, Esri World Topographic Map tiles, and OSRM/OpenStreetMap route fetching with dashed fallback lines.
+   - Use Leaflet 1.9.4 as the client-side map renderer and Esri World Topographic Map as the default basemap. Fetch driving routes from OSRM, whose road graph is based on OpenStreetMap data, and retain coordinate-based dashed fallback lines. Keep the terminology exact: `Esri` is the tile provider, `OSRM` is the routing engine, and `OpenStreetMap` is the road-data source; never spell Esri as `Eris`.
    - Make sections modular: optional modules can include lodging, budget, weather, visa, food, risks, packing, photo spots, tickets, driving notes, offline maps, map filters, layer toggles, and GPX/GeoJSON overlays.
 
 4. **Validate locally**

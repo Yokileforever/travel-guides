@@ -90,7 +90,7 @@ const travelerGroups = [
   },
   {
     id: "dongyu-he-yali",
-    label: "东嵎、何亚莉",
+    label: "东嵎、Sunny",
     origin: "杭州出发",
     note: "上午先抵达目的地",
     pendingItems: []

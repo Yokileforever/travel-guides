@@ -140,6 +140,7 @@ Add verified booking and pricing fields when available:
 
 ## Map Defaults
 
+- Map stack contract: Leaflet is the browser rendering framework; Esri supplies the default topographic tiles; OSRM calculates driving routes from OpenStreetMap road data. Do not describe OpenStreetMap as the routing engine, substitute OpenStreetMap tiles for the requested Esri basemap, or spell Esri as `Eris`.
 - Leaflet version: `1.9.4`.
 - Esri World Topographic Map tile URL:
   ```js
