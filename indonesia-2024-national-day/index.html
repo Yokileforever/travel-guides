@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="2024 国庆巴厘岛、科莫多与佩尼达岛互动旅行攻略，含每日路线、住宿、转机、长者与应急信息。">
+    <title>国庆巴厘岛 · 科莫多旅行攻略</title>
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="./vendor/leaflet/leaflet.css">
+    <link rel="stylesheet" href="./styles.css?v=20260820">
+  </head>
+  <body>
+    <a class="skip-link" href="#guideTabs">跳到攻略导航</a>
+
+    <main class="app-shell">
+      <section class="guide-panel" aria-label="印度尼西亚旅行攻略">
+        <header class="hero">
+          <div class="hero-utility">
+            <a class="collection-link" href="../" aria-label="返回旅行攻略合集"><span aria-hidden="true">←</span> 攻略合集</a>
+            <span class="archive-pill"><i aria-hidden="true"></i> 2024 原文归档</span>
+          </div>
+
+          <div class="postcard" role="img" aria-label="巴厘岛悬崖、科莫多群岛、佩尼达海湾与热带瀑布的原创旅行拼贴"></div>
+
+          <p class="eyebrow">Bali · Komodo · Nusa Penida</p>
+          <h1>国庆巴厘岛<br><span>群岛跳跃攻略</span></h1>
+          <p class="summary">
+            从杭州经新加坡落地巴厘岛，串联科莫多包船、佩尼达东西线、乌布与东部火山海岸。
+            这是一份按 2024 年原始资料复原的可执行手册；旧政策和班次均已单独标记，复用前请重新核验。
+          </p>
+
+          <div class="stats" aria-label="行程概览">
+            <span><strong>11</strong> 天跨度</span>
+            <span><strong>10</strong> 晚</span>
+            <span><strong>3</strong> 座主岛</span>
+            <span><strong>2</strong> 天请假</span>
+          </div>
+
+          <section class="trip-calendar-shell" aria-labelledby="tripCalendarTitle">
+            <div class="section-heading compact-heading">
+              <div>
+                <p class="section-kicker">TIME OFF PLAN</p>
+                <h2 id="tripCalendarTitle">请 2 天，串起 11 天跨度</h2>
+              </div>
+              <span class="date-chip">9.27—10.07</span>
+            </div>
+            <div id="tripCalendar" class="trip-calendar"></div>
+            <div class="calendar-foot">
+              <div class="calendar-legend" aria-label="日期类型图例">
+                <span><i class="legend-dot workday-dot"></i>工作日</span>
+                <span><i class="legend-dot leave-dot"></i>请假</span>
+                <span><i class="legend-dot holiday-dot"></i>法定假期</span>
+                <span><i class="legend-dot weekend-dot"></i>周末</span>
+              </div>
+              <a href="https://www.gov.cn/zhengce/zhengceku/202310/content_6911528.htm" target="_blank" rel="noopener noreferrer">核对：国务院 2024 放假安排</a>
+            </div>
+          </section>
+
+          <section class="transport-shell" aria-labelledby="transportTitle">
+            <div class="section-heading compact-heading">
+              <div>
+                <p class="section-kicker">TRANSPORT GROUPS</p>
+                <h2 id="transportTitle">分组交通</h2>
+              </div>
+              <span class="source-badge">已脱敏</span>
+            </div>
+            <div id="flightSummary" class="flight-summary"></div>
+          </section>
+        </header>
+
+        <nav class="tabs" id="guideTabs" role="tablist" aria-label="攻略导航">
+          <button class="tab-button active" id="tab-overview" data-view="overview" type="button" role="tab" aria-controls="overview" aria-selected="true" tabindex="0"><span aria-hidden="true">🧭</span><span>总览</span></button>
+          <button class="tab-button" id="tab-plan" data-view="plan" type="button" role="tab" aria-controls="plan" aria-selected="false" tabindex="-1"><span aria-hidden="true">📅</span><span>日程</span></button>
+          <button class="tab-button" id="tab-lodging" data-view="lodging" type="button" role="tab" aria-controls="lodging" aria-selected="false" tabindex="-1"><span aria-hidden="true">🏨</span><span>住宿</span></button>
+          <button class="tab-button" id="tab-spots" data-view="spots" type="button" role="tab" aria-controls="spots" aria-selected="false" tabindex="-1"><span aria-hidden="true">📍</span><span>风景</span></button>
+          <button class="tab-button" id="tab-transit" data-view="transit" type="button" role="tab" aria-controls="transit" aria-selected="false" tabindex="-1"><span aria-hidden="true">🧳</span><span>转机</span></button>
+          <button class="tab-button" id="tab-safety" data-view="safety" type="button" role="tab" aria-controls="safety" aria-selected="false" tabindex="-1"><span aria-hidden="true">🛟</span><span>安全准备</span></button>
+        </nav>
+
+        <section class="view active" id="overview" role="tabpanel" aria-labelledby="tab-overview">
+          <div class="notice-card notice-card--archive">
+            <span class="notice-icon" aria-hidden="true">◷</span>
+            <div>
+              <strong>先看状态，再照着走</strong>
+              <p>绿色表示原文明确，琥珀色表示 2024 经验需复核，虚线项表示资料未写清。签证、健康申报、船班与机场接驳尤其不要直接沿用旧信息。</p>
+            </div>
+          </div>
+
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">ROUTE RHYTHM</p>
+              <h2>四段节奏，一眼看懂</h2>
+            </div>
+          </div>
+          <div class="route-flow" id="routeFlow"></div>
+
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">DECISIONS FIRST</p>
+              <h2>出发前先定这四件事</h2>
+            </div>
+          </div>
+          <div class="decision-grid" id="decisionGrid"></div>
+
+          <section class="budget-shell" aria-labelledby="budgetTitle">
+            <div class="section-heading compact-heading">
+              <div>
+                <p class="section-kicker">BUDGET ANCHOR</p>
+                <h2 id="budgetTitle">费用锚点</h2>
+              </div>
+              <span class="source-badge source-badge--warm">2024 报价</span>
+            </div>
+            <div id="budgetSummary"></div>
+          </section>
+        </section>
+
+        <section class="view" id="plan" role="tabpanel" aria-labelledby="tab-plan" hidden>
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">DAY BY DAY</p>
+              <h2>11 天每日安排</h2>
+            </div>
+            <span class="section-count">核心 / 可放弃分开标</span>
+          </div>
+          <div class="day-list" id="dayList"></div>
+        </section>
+
+        <section class="view" id="lodging" role="tabpanel" aria-labelledby="tab-lodging" hidden>
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">SLEEP PLAN</p>
+              <h2>分组住宿</h2>
+            </div>
+            <span class="section-count" id="lodgingCount"></span>
+          </div>
+          <p class="section-intro">原文存在多人分住；这里仅保留公开物业名、日期与操作备注，订单号、住客姓名和私人确认单均已移除。价格未在正文形成可核对的订单总价，因此统一标为待补。</p>
+          <div class="lodging-list" id="lodgingList"></div>
+        </section>
+
+        <section class="view" id="spots" role="tabpanel" aria-labelledby="tab-spots" hidden>
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">ISLAND HIGHLIGHTS</p>
+              <h2>海岛风景</h2>
+            </div>
+            <span class="section-count" id="spotCount"></span>
+          </div>
+          <div class="visual-strip" id="visualStrip" aria-label="四段路线原创风景图"></div>
+          <div class="filter-bar" id="spotFilters" aria-label="景点筛选"></div>
+          <div class="spot-list" id="spotList"></div>
+        </section>
+
+        <section class="view" id="transit" role="tabpanel" aria-labelledby="tab-transit" hidden>
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">CGK FIELD NOTES</p>
+              <h2>雅加达过夜转机</h2>
+            </div>
+            <span class="source-badge source-badge--warm">2024 路线</span>
+          </div>
+          <div class="notice-card notice-card--warning">
+            <span class="notice-icon" aria-hidden="true">!</span>
+            <div>
+              <strong>长者路线有两次换航站楼</strong>
+              <p>厦门 T4 到达后需转 T3；雅加达 T3 国际到达后还要前往 T1 搭 06:20 早班机。先确认行李是否直挂、具体 T1A/T1B、夜间接驳与轮椅协助。</p>
+            </div>
+          </div>
+          <div class="transit-grid" id="transitGrid"></div>
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">MONEY AT AIRPORT</p>
+              <h2>机场取现：只保留通用步骤</h2>
+            </div>
+          </div>
+          <div id="cashGuide"></div>
+        </section>
+
+        <section class="view" id="safety" role="tabpanel" aria-labelledby="tab-safety" hidden>
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">CARE &amp; BACKUP</p>
+              <h2>长者、海上与应急</h2>
+            </div>
+          </div>
+          <div class="safety-grid" id="safetyGrid"></div>
+
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">EMERGENCY CONTACTS</p>
+              <h2>紧急联系卡</h2>
+            </div>
+            <span class="section-count">拨打前复核</span>
+          </div>
+          <div class="contact-grid" id="contactGrid"></div>
+
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">PACKING &amp; PAPERWORK</p>
+              <h2>出发前检查</h2>
+            </div>
+          </div>
+          <div class="prep-list" id="prepList"></div>
+        </section>
+      </section>
+
+      <section class="map-panel" aria-label="交互地图">
+        <div id="map"></div>
+        <div class="map-title-card">
+          <small>ISLAND ROUTE</small>
+          <strong>巴厘岛 → 科莫多 → 佩尼达</strong>
+          <span>点选日期或卡片，地图会自动聚焦</span>
+        </div>
+        <div class="map-toolbar" aria-label="地图图层控制">
+          <button id="fitRouteButton" type="button"><span aria-hidden="true">⌖</span> 全路线</button>
+          <button id="loadRoutesButton" type="button"><span aria-hidden="true">↝</span> 公路</button>
+          <button id="toggleFlightsButton" type="button" aria-pressed="false"><span aria-hidden="true">✈</span> 航班</button>
+          <button id="toggleLodgingButton" type="button" aria-pressed="true"><span aria-hidden="true">⌂</span> 住宿</button>
+          <button id="toggleSpotsButton" type="button" aria-pressed="true"><span aria-hidden="true">◆</span> 景点</button>
+        </div>
+        <div class="map-legend" id="mapLegend" aria-label="每日路线图例"></div>
+        <div class="map-status" id="mapStatus" role="status">底图：Esri World Topographic Map · 路线：坐标预览</div>
+      </section>
+    </main>
+
+    <script src="./vendor/leaflet/leaflet.js"></script>
+    <script src="./trip-data.js?v=20260820"></script>
+    <script src="./app.js?v=20260820"></script>
+  </body>
+</html>

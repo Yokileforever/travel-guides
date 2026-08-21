@@ -165,6 +165,7 @@ Add verified booking and pricing fields when available:
 ## Visual Checks
 
 - If adding a new module, check that it can be hidden/omitted without leaving empty UI shells.
+- Typography: identify the collection reference guide before styling. Compare the computed `font-family` for `body`, `h1`, `h2`, `h3`, tabs, labels, and `.stats strong` between the new/repaired page and that reference. For this collection, interface text should resolve from `-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`; keep `Georgia, serif` only where the reference already uses it for numeric emphasis. Treat an unrequested Songti/CJK-serif heading as a failed consistency check.
 - Flight cards: show flight number, airport codes, city/terminal, departure/arrival dates and times, and duration.
 - Traveler transport groups: render the outer group list as one column so every group owns a full-width row; separate groups with a clear dashed boundary. Render each group's cards with a responsive `auto-fit`/`minmax` inner grid, collapsing to one column on narrow screens. Test at least one, two, and three-or-more groups; also test a long group label and a group with three-or-more transport/pending cards.
 - Traveler transport groups: confirm displayed group labels come from `travelerGroups[].label`, every grouped transport appears exactly once, source order is preserved, and no `第一组`/`第二组` text is generated from array indexes.
