@@ -1,6 +1,6 @@
 ---
 name: travel-guide-publisher
-description: Convert travel notes, Yuque docs, Markdown, pasted itineraries, or booking/boarding-pass artifacts into a polished interactive travel guide website with itinerary cards, leave/public-holiday calendars, Leaflet maps, route data, lodging/hotel points, images, flights, preparation checklists, and optional GitHub Pages publishing. Use when the user asks to turn a travel article into an攻略/guide/site/map, calculate a time-off plan, show workdays/leave/holidays/weekends, extract a travel plan from a document, make a public shareable trip page, add map layers such as accommodation points, deploy a travel guide to GitHub, or maintain a multi-trip travel-guides repository.
+description: Convert travel notes, Yuque docs, Markdown, pasted itineraries, or booking/boarding-pass artifacts into a polished interactive travel guide website with itinerary cards, leave/public-holiday calendars, Leaflet maps, route data, lodging and rental-car points, flight and rental-order cards, trip-budget estimates, images, preparation checklists, and optional GitHub Pages publishing. Use when the user asks to turn a travel article into an攻略/guide/site/map, calculate time off or total trip costs, extract transport/lodging/rental details from documents or logged-in order pages, add map layers such as accommodation or pickup/dropoff points, make a public shareable trip page, deploy a travel guide to GitHub, or maintain a multi-trip travel-guides repository.
 ---
 
 # Travel Guide Publisher
@@ -20,6 +20,7 @@ When a user reports a defect in an existing guide and also asks to improve this 
    - If `yuque-cli` is unavailable, check whether the installed command is named `yuque`; inspect `yuque --help`, then use `yuque show <namespace>/<repo>/<slug>` when supported.
    - If attachments matter, use browser/computer-use with logged-in state for read-only download; never publish ticket numbers, barcodes, booking references, passport numbers, or token-like data.
    - Read booking screenshots when they contain facts missing from the body, especially hotel names, stay dates, booking status, and total price. Extract only facts needed by the guide; do not embed private order screenshots in a public page.
+   - For logged-in rental orders, obtain permission before opening order details, keep the interaction read-only, and extract only provider, public vehicle specs, status, duration, pickup/return time and public store location, paid totals/breakdown, and operational warnings. Never copy order IDs, renter names, phone numbers, account links, access tokens, or private proof images into the guide.
    - If source content is pasted, parse directly.
 
 2. **Extract trip model**
@@ -34,6 +35,8 @@ When a user reports a defect in an existing guide and also asks to improve this 
    - For every lodging, capture the exact public name, city, stay dates/nights, map point, booking status, price data, and verified public booking links when available.
    - If lodging is booked, display the booked total from the source. If it is not booked, look up a current reference price for the exact stay dates and label it as a dated reference price. Never mix booked totals with live reference prices.
    - Prefer exact Trip.com and Booking.com property pages; include only confirmed platforms and never guess a URL. Use an exact Ctrip page when Trip.com is unavailable. Never link a private order-detail page.
+   - Add a `rentals` module when a rental order exists. Link pickup and return records to `places`, preserve source price status, and reconcile both timestamps against inbound/outbound flights. Turn impossible or tight connections into prominent warnings and preparation items.
+   - Add a `budget` module when monetary data exists or the user asks for a trip total. Keep confirmed payments separate from estimates, tag every amount as per-person or shared/per-order, avoid double-counting discounts and subtotals, and show traveler-count scenarios when party size is unknown.
    - Reconcile source coverage before rendering: compare source itinerary rows, attraction headings, driving-route headings, lodging screenshots, and transport blocks against the structured modules. Every source item must be intentionally represented or explicitly classified as omitted/optional; do not rely on ad hoc “key attraction” selection.
 
 3. **Generate guide**
@@ -43,6 +46,8 @@ When a user reports a defect in an existing guide and also asks to improve this 
    - Render traveler transport groups from data: each group occupies one full-width row with a clear dashed boundary, while its transport cards use a responsive inner grid. Support any number of groups and cards without index-specific markup.
    - When flights and airport coordinates are available, add dedicated flight-route and airport layers, a flight legend, and one synchronized layer toggle that can show/focus or hide both layers without changing the default local-itinerary view.
    - When `tripCalendar` is enabled, render a compact time-off section after the summary/stats and before flight cards, with an explicit date range and a headline such as `请 3 天，串起 11 天跨度`.
+   - Render rental orders as practical cards with vehicle, status, pickup/return schedule, public store location, paid total, price breakdown, and timing alerts. Add a dedicated pickup/return map layer and synchronized toggle; clicking a rental card must restore a hidden layer and focus its two points.
+   - Render budget as a named overview module with confirmed total, confirmed category breakdown, estimated ranges, traveler-count scenarios, assumptions, and exclusions. Show flight prices on flight cards when known.
    - Reuse the same calendar data shape, badge semantics, responsive layout, and visual language across every guide in a collection unless a guide-specific design clearly requires adaptation.
    - Treat typography as a collection-level design token, not a per-guide stylistic choice. Reuse the reference guide's computed font families for body copy, `h1`–`h3`, tabs, labels, and summary statistics. For this collection, default to `-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif` for Chinese and Latin interface text; reserve `Georgia, serif` for an already-established numeric treatment such as calendar dates. Do not introduce Songti or another CJK serif for headings unless the user explicitly requests a distinct typographic direction.
    - For guides with several content views, use a prominent sticky tab bar. Pair each tab label with one semantically matched emoji when a friendly, highly scannable style is appropriate; keep the text label and mark the emoji `aria-hidden`.
@@ -56,6 +61,8 @@ When a user reports a defect in an existing guide and also asks to improve this 
    - Confirm every interactive control has intentional project-matching styles; native browser buttons are a failed visual check.
    - For a time-off calendar, verify every displayed date, weekday, type, leave count, inclusive span, and trip-boundary day. Check desktop and narrow layouts for badge or label overflow.
    - At full-route zoom, check that permanent day labels, lodging markers, and nearby attraction markers do not hide one another. Adjust placement, zoom behavior, or clustering when collisions occur.
+   - Verify rental-layer hide/show state, pickup/return marker count, card-to-map focus, mobile card layout, and airport/rental-marker collisions.
+   - Recalculate budget totals independently. Confirm shared costs are counted once, per-person costs scale with traveler count, discounts are netted once, estimates remain ranges, and unpriced items are visibly excluded or marked `待补`.
    - Run a coverage audit after visual fixes: for every attraction named in a day route or activity, confirm whether it needs a `spots` entry and map marker. Verify the current artifact before updating this skill with any newly learned rule.
 
 5. **Publish**
@@ -71,6 +78,7 @@ When a user reports a defect in an existing guide and also asks to improve this 
      ```
    - Use GitHub Pages from `main` branch root when deploying to GitHub.
    - Exact personal leave dates and work schedules are privacy-sensitive. Before publishing them to a public site, identify the dates that will be exposed and obtain explicit informed confirmation from the user. Do not treat a generic “deploy latest” request as consent when a new update introduces this data.
+   - Exact order-derived pickup/return times and personal spending totals are also sensitive. Before first publishing them, enumerate the fields that will become public and obtain explicit informed confirmation; never publish private order identifiers or access links.
    - Verify the GitHub Pages homepage and trip subpage both return `200`.
 
 ## UX Requirements
@@ -88,6 +96,8 @@ When a user reports a defect in an existing guide and also asks to improve this 
 - Keep calendar tiles stable and scannable: six or seven columns on wide layouts, two or three columns on narrow layouts, with no badge, weekday, or note overflow.
 - Show lodging as its own map layer when coordinates are available; use a distinct hotel/accommodation marker, include a list or tab, and let list items focus/open the map marker.
 - Lodging cards and lodging map popups must show verified booking links and price status when the data exists. Use labels such as `已预订 · 1 晚总价` or `参考价 · 9 月 22 日入住`; never imply a live price is a paid amount.
+- Rental cards must distinguish pickup and return, paid and estimated amounts, order duration, and timing conflicts. Keep long store names and price rows readable on narrow screens.
+- Budget summaries must state their calculation basis. Present confirmed spend separately from estimated additions, identify `/ 人`, `/ 车`, `/ 间`, or `/ 单` amounts, and never present a scenario range as an already-paid total.
 - Only attractions in the structured `spots` module receive attraction markers. Ensure important route waypoints that are also attractions are present in `spots`, and resolve marker collisions rather than assuming a marker is missing.
 - For maps, design for future layers: routes, places, hotels, scenic spots, airports, driving segments, day filters, category filters, and custom imported GeoJSON/GPX should be able to coexist.
 - Draw flights as geodesic or clearly labeled approximate air-route polylines in a separate layer; never send flight segments to OSRM. Give airports distinct code markers, combine reciprocal flights that share one corridor when lines would overlap, and label the map route as illustrative rather than real-time tracking.
@@ -95,10 +105,13 @@ When a user reports a defect in an existing guide and also asks to improve this 
 - Use images only when they clearly belong to the attraction; remove ambiguous booking, airline, or unrelated screenshots from attraction cards.
 - If publishing publicly, remove or avoid sensitive travel data: barcodes, booking refs, ticket numbers, identity document details, phone/email, and exact private accommodation documents.
 - Treat exact leave/work dates as personal schedule data. Publish them only after the user explicitly approves public disclosure of those dates.
+- Treat order-derived schedules and personal spending as sensitive travel data. Publish them only after explicit informed approval, even when the order ID itself has been removed.
 
 ## Deployment Notes
 
 - Use `gh` when available for repository creation, push, and GitHub Pages setup.
-- If `gh auth status` fails, ask the user to authorize before creating persistent GitHub access.
+- Treat GitHub CLI authentication and Git remote authentication as separate channels. Environment variables `GH_TOKEN` and `GITHUB_TOKEN` override credentials stored by `gh`; read the authentication diagnostics in `references/implementation-checklist.md` before requesting a new login.
+- Never print token values, dump the environment, overwrite credentials, or start `gh auth login` without informed approval. Use `git ls-remote` only for reachability/read access and `git push --dry-run` for a non-mutating push-path check; a public repository may allow anonymous reads.
+- A working Git push channel can update an existing Pages site even when `gh` is unavailable, followed by public Actions/Page verification. Creating or configuring Pages through `gh api` still requires valid GitHub CLI authentication.
 - Avoid committing temporary downloads, PDFs, CLI installs, `.npm-global`, screenshots, or source documents unless the user explicitly wants them public.
 - After deployment, provide both the repository URL and public Pages URLs.

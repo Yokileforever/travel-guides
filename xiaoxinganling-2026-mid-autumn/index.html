@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#173f32">
     <title>中秋小兴安岭 · 五花山自驾攻略</title>
     <link rel="stylesheet" href="./vendor/leaflet/leaflet.css">
-    <link rel="stylesheet" href="./styles.css?v=20260815-tab-emoji">
+    <link rel="stylesheet" href="./styles.css?v=20260819-budget">
   </head>
   <body>
     <main class="app-shell">
@@ -48,12 +48,13 @@
         <section class="view active" id="overview" role="tabpanel" aria-labelledby="tab-overview">
           <h2>路线节奏</h2>
           <div class="route-flow" id="routeFlow"></div>
+          <div id="budgetSummary"></div>
           <h2>先看这四件事</h2>
           <div class="tips-grid">
             <article><span>01</span><h3>9/23 是长途日</h3><p>落地睡一晚后取车，哈尔滨到伊春中途穿插环廊、乌带与宝宇，景点要按天色做减法。</p></article>
             <article><span>02</span><h3>主景区要早进</h3><p>五营与汤旺河都有观光车衔接，上午入园更容易避开人流，也给傍晚公路秋色留时间。</p></article>
             <article><span>03</span><h3>G331 不贪停</h3><p>嘉荫到佳木斯还要赶晚班机，萝北段以观景停车点为主，严格设置最晚离开时间。</p></article>
-            <article><span>04</span><h3>异地还车先锁定</h3><p>哈尔滨取车、佳木斯还车涉及门店与费用，订车前确认异地还车、轮胎和保险范围。</p></article>
+            <article><span>04</span><h3>两笔租车都要校时</h3><p>主订单的取车早于抵达、还车晚于起飞；浦东接驳订单只留 30 分钟取车缓冲。出发前必须调整并确认门店保留时间。</p></article>
           </div>
           <aside class="notice"><strong>行程年份</strong><p>根据文档时间与 2026 年中秋日期，攻略按 2026 年 9 月 22–27 日整理；若机票实际年份不同，修改数据即可。</p></aside>
         </section>
@@ -61,7 +62,7 @@
         <section class="view" id="plan" role="tabpanel" aria-labelledby="tab-plan"><h2>每日安排</h2><div id="dayList" class="day-list"></div></section>
         <section class="view" id="lodging" role="tabpanel" aria-labelledby="tab-lodging"><h2>住宿落点</h2><p class="section-note">酒店名称来自原文预订截图；订单截图与预订隐私不公开。点击卡片可在地图定位住宿城市。</p><div id="lodgingList" class="lodging-list"></div></section>
         <section class="view" id="spots" role="tabpanel" aria-labelledby="tab-spots"><h2>重点景点</h2><div id="spotList" class="spot-list"></div></section>
-        <section class="view" id="driving" role="tabpanel" aria-labelledby="tab-driving"><h2>自驾公路</h2><div id="drivingList" class="driving-list"></div></section>
+        <section class="view" id="driving" role="tabpanel" aria-labelledby="tab-driving"><h2>自驾与租车</h2><p class="section-note">两笔租车信息来自一嗨订单；订单号、承租人、登录链接和账户信息不公开。卡片中的红色提示必须在出发前处理。</p><div id="drivingList" class="driving-list"></div></section>
         <section class="view" id="prep" role="tabpanel" aria-labelledby="tab-prep"><h2>出发前检查</h2><div id="prepList" class="prep-list"></div></section>
       </section>
 
@@ -71,6 +72,7 @@
           <button id="fitRouteButton" type="button">显示自驾</button>
           <button id="toggleFlightsButton" type="button" aria-pressed="true"><span aria-hidden="true">✈</span> 航班</button>
           <button id="loadRoutesButton" type="button">加载驾车路线</button>
+          <button id="toggleRentalButton" type="button" aria-pressed="true">租车点</button>
           <button id="toggleLodgingButton" type="button" aria-pressed="true">住宿点</button>
           <button id="toggleSpotsButton" type="button" aria-pressed="true">景点</button>
         </div>
@@ -79,6 +81,6 @@
       </section>
     </main>
     <script src="./vendor/leaflet/leaflet.js"></script>
-    <script src="./app.js?v=20260815-flight-layer"></script>
+    <script src="./app.js?v=20260819-budget"></script>
   </body>
 </html>

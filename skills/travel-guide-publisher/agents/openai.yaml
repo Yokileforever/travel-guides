@@ -1,4 +1,4 @@
 interface:
   display_name: "Travel Guide Publisher"
-  short_description: "Build map guides with lodging and leave calendars"
-  default_prompt: "Use $travel-guide-publisher to convert this travel article into an interactive guide with maps, lodging details, and a verified leave/holiday calendar, then publish it when requested."
+  short_description: "Build travel guides with maps, rentals, and budgets"
+  default_prompt: "Use $travel-guide-publisher to turn my travel notes and bookings into an interactive guide with maps, rental details, budget scenarios, and privacy-safe publishing."

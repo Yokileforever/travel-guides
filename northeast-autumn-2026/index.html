@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#6f3c24">
     <title>国庆东北秋景自驾 · 吉进辽出攻略</title>
     <link rel="stylesheet" href="./vendor/leaflet/leaflet.css">
-    <link rel="stylesheet" href="./styles.css?v=20260815-tab-emoji">
+    <link rel="stylesheet" href="./styles.css?v=20260819-car-rental">
   </head>
   <body>
     <main class="app-shell">
@@ -51,7 +51,7 @@
             <article><span>01</span><h3>第一天别低估车程</h3><p>长春接齐同行人、采购后到露水河约 300 公里；国庆拥堵会放大疲劳，设置最晚出发时间。</p></article>
             <article><span>02</span><h3>南坡是天气牌</h3><p>提前抢分时票，同时准备“跳过南坡、直接走 G331”的雨雪停运备选。</p></article>
             <article><span>03</span><h3>10/4 必须早</h3><p>花山溪谷和四海龙湾同日强度高，前者尽量 8 点前进，后者按最晚入园时间倒推离开。</p></article>
-            <article><span>04</span><h3>返程尚未闭环</h3><p>攻略标出了原文航班冲突；确定沈阳或长春离境前，不要锁死最后一天的接驳和还车点。</p></article>
+            <article><span>04</span><h3>还车与航班撞时</h3><p>一嗨订单要求 10/7 20:00 在长春龙嘉机场原店还车，恰与 HU7488 计划起飞时间重叠；必须提前调整还车或返程方案。</p></article>
           </div>
           <aside class="notice"><strong>两组同行人</strong><p>父母从长沙出发；东嵎、Sunny 从杭州出发。四人 10 月 1 日在长春会合。东嵎、Sunny 的 HU7488 返程与“辽出/沈阳落点”冲突，父母返程航班也尚未填写。</p></aside>
         </section>
@@ -59,7 +59,7 @@
         <section class="view" id="plan" role="tabpanel" aria-labelledby="tab-plan"><h2>每日安排</h2><div id="dayList" class="day-list"></div></section>
         <section class="view" id="lodging" role="tabpanel" aria-labelledby="tab-lodging"><h2>住宿落点</h2><p class="section-note">住宿名称、房型、日期与已订总价来自原文订单截图；订单号、完整地址、联系人和订单图片不公开。点击卡片可定位住宿点。</p><div id="lodgingList" class="lodging-list"></div></section>
         <section class="view" id="spots" role="tabpanel" aria-labelledby="tab-spots"><h2>重点景点</h2><div id="spotList" class="spot-list"></div></section>
-        <section class="view" id="driving" role="tabpanel" aria-labelledby="tab-driving"><h2>自驾公路</h2><div id="drivingList" class="driving-list"></div></section>
+        <section class="view" id="driving" role="tabpanel" aria-labelledby="tab-driving"><h2>自驾与租车</h2><p class="section-note">租车信息来自一嗨订单；订单号、承租人、登录链接和账户信息不公开。取还车安排与返程计划存在冲突，出发前必须完成调整。</p><div id="drivingList" class="driving-list"></div></section>
         <section class="view" id="prep" role="tabpanel" aria-labelledby="tab-prep"><h2>出发前检查</h2><div id="prepList" class="prep-list"></div></section>
       </section>
 
@@ -69,6 +69,7 @@
           <button id="fitRouteButton" type="button">显示自驾</button>
           <button id="toggleFlightsButton" type="button" aria-pressed="false"><span aria-hidden="true">✈</span> 航班</button>
           <button id="loadRoutesButton" type="button">加载驾车路线</button>
+          <button id="toggleRentalButton" type="button" aria-pressed="true">租车点</button>
           <button id="toggleLodgingButton" type="button" aria-pressed="true">住宿点</button>
           <button id="toggleSpotsButton" type="button" aria-pressed="true">景点</button>
         </div>
@@ -77,6 +78,6 @@
       </section>
     </main>
     <script src="./vendor/leaflet/leaflet.js"></script>
-    <script src="./app.js?v=20260815-northeast-autumn"></script>
+    <script src="./app.js?v=20260819-car-rental"></script>
   </body>
 </html>

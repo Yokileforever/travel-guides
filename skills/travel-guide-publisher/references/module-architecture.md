@@ -38,6 +38,7 @@ const trip = {
     map: true,
     lodging: true,
     spots: true,
+    rentals: false,
     prep: true,
     budget: false,
     weather: false,
@@ -48,7 +49,7 @@ const trip = {
 };
 ```
 
-Existing simple pages may keep separate `flights`, `days`, `lodgings`, `spots`, and `prep` arrays, but new sections should follow the same pattern: `const budgets = [...]`, `const weather = [...]`, `const tickets = [...]`, with dedicated render functions.
+Existing simple pages may keep separate `flights`, `days`, `lodgings`, `rentals`, `spots`, and `prep` arrays, but new sections should follow the same pattern: a named data object/array plus a dedicated render function.
 
 ## Section Navigation
 
@@ -220,20 +221,112 @@ UI pattern:
 
 Privacy: never publish booking references, order screenshots, guest names, room numbers, payment details, phone/email, barcodes, or private accommodation documents.
 
-### Budget
+### Rental Cars
 
-Use for spend estimates, paid bookings, deposits, per-person costs, cash needs, and currency notes.
+Use when the source contains a rental order, self-drive booking, or pickup/return plan. Keep order records separate from generic driving advice so they can drive cards, alerts, budget totals, and map behavior.
 
 Suggested fields:
 
 ```js
-const budget = [
-  { category: "住宿", amount: "¥3200", status: "已预订", note: "不公开订单号" },
-  { category: "门票", amount: "待补", status: "现场/官网", note: "核对官方价格" }
+const rentals = [
+  {
+    id: "main-road-trip",
+    role: "主线自驾",
+    provider: "Rental provider",
+    status: "预约成功 · 已支付",
+    vehicle: "Vehicle model",
+    specs: ["自动挡", "5 座"],
+    duration: "3 天 22 小时",
+    pickup: {
+      place: "pickupStore",
+      date: "9 月 22 日",
+      time: "22:30",
+      store: "机场门店",
+      location: "公共停车区域"
+    },
+    returnTrip: {
+      place: "returnStore",
+      date: "9 月 26 日",
+      time: "17:00",
+      store: "机场门店",
+      location: "公共停车区域"
+    },
+    price: {
+      status: "paid",
+      currency: "CNY",
+      total: 849,
+      breakdown: [
+        { label: "车辆租赁及门店服务", amount: 629 },
+        { label: "基本保障", amount: 200 },
+        { label: "车辆整备费", amount: 20 },
+        { label: "异地服务费", amount: 100 },
+        { label: "优惠", amount: -100 }
+      ]
+    },
+    severity: "urgent",
+    warning: "还车时间与返程航班冲突，必须调整。"
+  }
 ];
 ```
 
-Public-page privacy: do not publish booking IDs, payment screenshots, full receipts, card details, or invoice identifiers.
+Data and timing rules:
+
+- Join `pickup.place` and `returnTrip.place` to public `places` entries. Mark approximate coordinates explicitly; do not send private addresses to public geocoders without approval.
+- Preserve the final paid total independently from the line-item breakdown. Store monetary values as numbers and format currency only while rendering.
+- Compare inbound arrival to pickup and return to outbound check-in/departure. Treat impossible buffers as `urgent`, short positive buffers as `warning`, and explain the required action.
+- Copy the corrective action into the applicable itinerary day and `prep`; the warning must not exist only inside the rental card.
+
+UI and map pattern:
+
+- Show provider/role, status, vehicle/specs, duration, pickup, return, final paid total, net line items, and warning in each card.
+- Stack pickup and return sections on narrow screens. Keep totals and long store names from covering each other.
+- Add a dedicated `rentalLayer` with distinct `取` and `还` markers and a visible toggle. Clicking a rental card must restore a hidden layer, fit both endpoints, and open the pickup popup.
+- Offset or otherwise disambiguate rental and airport markers when they share coordinates.
+
+Privacy: publish only public operational facts needed for the trip. Exclude order IDs, renter/contact information, access URLs/tokens, payment instruments, QR codes, and source screenshots. Treat exact pickup/return schedules and personal spend as sensitive; obtain informed approval before first public deployment.
+
+### Budget
+
+Use for confirmed spend, estimates, per-person/shared costs, traveler scenarios, cash needs, and currency notes. Keep budget data separate from the owning modules, but derive confirmed values from those modules so one amount has one source of truth.
+
+Suggested fields:
+
+```js
+const budget = {
+  confirmed: [
+    { label: "往返机票", amount: 1126, basis: "perPerson", source: "flights" },
+    { label: "住宿", amount: 808, basis: "perOrder", source: "lodgings" },
+    { label: "租车", amount: 1111, basis: "perVehicle", source: "rentals" }
+  ],
+  estimates: [
+    { label: "景区门票", min: 165, max: 165, basis: "perPerson" },
+    { label: "油费、路费与停车", min: 900, max: 1200, basis: "perVehicle" },
+    { label: "餐饮", min: 600, max: 900, basis: "perPerson" }
+  ],
+  scenarios: [
+    { travelers: 1, label: "1 人出行", min: 4700, max: 5300 },
+    { travelers: 2, label: "2 人同行", min: 6600, max: 7500 }
+  ],
+  assumptions: ["机票按每人计", "同行人同住并共用车辆"],
+  exclusions: ["可选游船", "购物", "临时改签"]
+};
+```
+
+Calculation rules:
+
+- Use `confirmed`, `reference`, or `estimated` status and a basis such as `perPerson`, `perVehicle`, `perRoom`, or `perOrder` for every amount.
+- Compute `confirmedTotal` from final paid totals, not pre-discount line items. Never add both a module total and its breakdown.
+- Compute each scenario as shared confirmed/estimated costs plus `travelerCount × perPerson costs`. Keep estimate minima and maxima separate until the final range.
+- Preserve decimal precision for source totals; round only the user-facing scenario range when useful. Display the arithmetic basis beside the result.
+- If traveler count, price basis, or an item is unknown, mark it `待补` or show multiple labeled scenarios instead of inventing one exact total.
+
+UI pattern:
+
+- Show a dominant confirmed-spend total, a compact confirmed-category breakdown, estimated ranges, traveler-count scenarios, assumptions, and exclusions.
+- Show known flight prices on flight cards and booked totals in lodging/rental cards; the budget is a roll-up, not the only place where prices appear.
+- Stack category and scenario grids on narrow screens and verify there is no horizontal overflow.
+
+Public-page privacy: do not publish booking IDs, payment screenshots, full receipts, card details, invoice identifiers, or private financial proof. Treat personal spending totals as sensitive and obtain informed approval before first public deployment.
 
 ### Weather
 
@@ -280,6 +373,7 @@ const mapLayers = {
   labelLayer: L.layerGroup(),
   spotLayer: L.layerGroup(),
   hotelLayer: L.layerGroup(),
+  rentalLayer: L.layerGroup(),
   airportLayer: L.layerGroup()
 };
 ```
@@ -288,6 +382,7 @@ Recommended future controls:
 
 - Day filter: focus/highlight a single day.
 - Category filter: toggle attractions, hotels, flight routes, airports, food, photo spots.
+- Rental layer toggle: synchronize `rentalLayer` visibility and `aria-pressed`; rental cards restore the layer before focusing pickup/return bounds.
 - Flight layer toggle: synchronize `flightLayer` and `airportLayer`; hide/show both together, restore them when a flight legend item is chosen, and keep distant airports out of the default local-itinerary bounds.
 - Route source selector: fallback straight segments, OSRM driving route, imported GeoJSON/GPX.
 - Basemap selector: Esri Topographic, OpenStreetMap, satellite imagery if requested.
@@ -310,6 +405,7 @@ function renderTravelerGroups() {}
 function renderCalendar() {}
 function renderItinerary() {}
 function renderLodgings() {}
+function renderRentals() {}
 function renderSpots() {}
 function renderBudget() {}
 function renderMapLayers() {}
@@ -318,7 +414,11 @@ function renderMapLayers() {}
 Guard optional modules:
 
 ```js
-if (trip.modules.budget && budget.length) {
+if (trip.modules.rentals && rentals.length) {
+  renderRentals();
+}
+
+if (trip.modules.budget && budget) {
   renderBudget();
 }
 ```
@@ -328,7 +428,10 @@ if (trip.modules.budget && budget.length) {
 - Check responsive layout at narrow and wide widths.
 - Confirm text does not overlap badges, images, map controls, or long labels.
 - Verify public pages do not expose sensitive booking, identity, financial, or barcode data.
+- For rentals, verify source coverage, final paid totals, flight connection buffers, corrective prep items, dedicated layer toggling, card-to-map focus, and pickup/return marker collisions.
+- For budgets, independently recompute confirmed totals and one-/two-traveler scenarios; verify basis multiplication, discounts, decimal precision, ranges, assumptions, exclusions, and narrow-screen stacking.
 - If a public page includes exact leave/work dates, confirm the user explicitly approved publishing those dates.
+- If a public page newly includes exact order-derived schedules or personal spending totals, enumerate them and obtain explicit informed approval before publishing.
 - If a module uses live data, cite or note the source in the final response.
 - Reconcile source coverage across modules: `days`, `places`, `spots`, `lodgings`, and `drivingNotes` are separate datasets, so adding an item to one does not add it to the others.
 - For each named itinerary attraction, make an explicit choice: route-only, activity-only, full `spots` card plus marker, or intentionally omitted. Default to a `spots` entry when the guide presents it as a destination rather than incidental context.

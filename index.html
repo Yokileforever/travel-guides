@@ -58,9 +58,41 @@
         line-height: 1.7;
       }
 
+      .year-groups {
+        display: grid;
+        gap: 42px;
+      }
+
+      .year-group {
+        display: grid;
+        gap: 16px;
+      }
+
+      .year-heading {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 16px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--line);
+      }
+
+      .year-heading h2 {
+        margin: 0;
+        color: var(--green);
+        font-size: 32px;
+        line-height: 1;
+      }
+
+      .year-heading span {
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 750;
+      }
+
       .guide-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 14px;
       }
 
@@ -81,7 +113,7 @@
         border-color: var(--green);
       }
 
-      .guide-card h2 {
+      .guide-card h3 {
         margin: 0;
         font-size: 26px;
       }
@@ -112,6 +144,31 @@
         color: var(--coral);
         font-weight: 820;
       }
+
+      @media (max-width: 820px) {
+        .guide-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 560px) {
+        main {
+          width: min(100% - 28px, 1060px);
+          padding: 38px 0;
+        }
+
+        .year-groups {
+          gap: 34px;
+        }
+
+        .year-heading h2 {
+          font-size: 28px;
+        }
+
+        .guide-grid {
+          grid-template-columns: 1fr;
+        }
+      }
     </style>
   </head>
   <body>
@@ -122,48 +179,65 @@
         把每一次旅行都整理成可以分享的互动攻略：路线、航班、住宿、景点、地图和准备清单都放在一个入口里。
       </p>
 
-      <section class="guide-grid" aria-label="旅行攻略列表">
-        <a class="guide-card" href="./indonesia-2024-national-day/">
-          <div>
-            <h2>国庆巴厘岛 · 科莫多</h2>
-            <p>杭州出发串联巴厘南部、科莫多包船、佩尼达东西线、乌布与东部海岸，含分组交通、雅加达转机、长者与应急卡。</p>
+      <div class="year-groups" aria-label="按年份分组的旅行攻略">
+        <section class="year-group" aria-labelledby="year-2026">
+          <header class="year-heading">
+            <h2 id="year-2026">2026</h2>
+            <span>3 篇攻略</span>
+          </header>
+          <div class="guide-grid">
+            <a class="guide-card" href="./northeast-autumn-2026/">
+              <div>
+                <h3>国庆东北秋景自驾</h3>
+                <p>长春进、沈阳出的吉林—辽宁赏秋线，含 G331、长白山南坡、花山溪谷、四海龙湾和桓仁互动地图。</p>
+              </div>
+              <div class="meta-row"><span>2026 国庆</span><span>7 天跨度</span><span>吉林 · 辽宁</span></div>
+              <span class="open-link">打开攻略</span>
+            </a>
+            <a class="guide-card" href="./xiaoxinganling-2026-mid-autumn/">
+              <div>
+                <h3>中秋小兴安岭</h3>
+                <p>哈尔滨出发，经伊春、汤旺、嘉荫到佳木斯的五花山自驾，含每日路线、住宿点与赏秋地图。</p>
+              </div>
+              <div class="meta-row">
+                <span>2026 中秋</span>
+                <span>5 天</span>
+                <span>黑龙江</span>
+              </div>
+              <span class="open-link">打开攻略</span>
+            </a>
+            <a class="guide-card" href="./egypt-2026-may/">
+              <div>
+                <h3>五一埃及自驾</h3>
+                <p>开罗、赫尔格达、卢克索、阿斯旺、阿布辛贝和马特鲁港，含 Leaflet 互动地图与每日路线。</p>
+              </div>
+              <div class="meta-row">
+                <span>2026 五一</span>
+                <span>10 天</span>
+                <span>埃及</span>
+              </div>
+              <span class="open-link">打开攻略</span>
+            </a>
           </div>
-          <div class="meta-row"><span>2024 国庆</span><span>11 天跨度</span><span>印度尼西亚群岛</span></div>
-          <span class="open-link">打开攻略</span>
-        </a>
-        <a class="guide-card" href="./northeast-autumn-2026/">
-          <div>
-            <h2>国庆东北秋景自驾</h2>
-            <p>长春进、沈阳出的吉林—辽宁赏秋线，含 G331、长白山南坡、花山溪谷、四海龙湾和桓仁互动地图。</p>
+        </section>
+
+        <section class="year-group" aria-labelledby="year-2024">
+          <header class="year-heading">
+            <h2 id="year-2024">2024</h2>
+            <span>1 篇攻略</span>
+          </header>
+          <div class="guide-grid">
+            <a class="guide-card" href="./indonesia-2024-national-day/">
+              <div>
+                <h3>国庆巴厘岛 · 科莫多</h3>
+                <p>杭州出发串联巴厘南部、科莫多包船、佩尼达东西线、乌布与东部海岸，含分组交通、雅加达转机、长者与应急卡。</p>
+              </div>
+              <div class="meta-row"><span>2024 国庆</span><span>11 天跨度</span><span>印度尼西亚群岛</span></div>
+              <span class="open-link">打开攻略</span>
+            </a>
           </div>
-          <div class="meta-row"><span>2026 国庆</span><span>7 天跨度</span><span>吉林 · 辽宁</span></div>
-          <span class="open-link">打开攻略</span>
-        </a>
-        <a class="guide-card" href="./xiaoxinganling-2026-mid-autumn/">
-          <div>
-            <h2>中秋小兴安岭</h2>
-            <p>哈尔滨出发，经伊春、汤旺、嘉荫到佳木斯的五花山自驾，含每日路线、住宿点与赏秋地图。</p>
-          </div>
-          <div class="meta-row">
-            <span>2026 中秋</span>
-            <span>5 天</span>
-            <span>黑龙江</span>
-          </div>
-          <span class="open-link">打开攻略</span>
-        </a>
-        <a class="guide-card" href="./egypt-2026-may/">
-          <div>
-            <h2>五一埃及自驾</h2>
-            <p>开罗、赫尔格达、卢克索、阿斯旺、阿布辛贝和马特鲁港，含 Leaflet 互动地图与每日路线。</p>
-          </div>
-          <div class="meta-row">
-            <span>2026 五一</span>
-            <span>10 天</span>
-            <span>埃及</span>
-          </div>
-          <span class="open-link">打开攻略</span>
-        </a>
-      </section>
+        </section>
+      </div>
     </main>
   </body>
 </html>

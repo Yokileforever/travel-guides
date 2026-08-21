@@ -18,10 +18,11 @@
 - Attachments may require a logged-in browser session even when `YUQUE_TOKEN` works for document body.
 - Use Computer Use only for read-only retrieval unless the user explicitly asks to modify or publish.
 - When lodging facts appear only in screenshots, inspect each image for hotel name, stay date, booking status, and total price. Treat all other order content as private by default.
+- For logged-in rental-order pages, obtain permission before opening detail links and remain read-only. Extract operational facts only; exclude order IDs, renter/contact details, private access URLs, tokens, QR codes, and screenshots from public artifacts.
 
 ## Travel Data Model
 
-Prefer modular data. Start with `flights`, `days`, `places`, `spots`, and `prep`; add `travelerGroups` when people have different origins, departures, returns, or transport records, and add `lodgings` whenever the source mentions hotels/accommodation. Add `tripCalendar` when leave planning or holiday/weekend context matters. Add optional arrays such as `budget`, `weather`, `tickets`, `food`, `drivingNotes`, or `photoSpots` only when source content or the user asks for them.
+Prefer modular data. Start with `flights`, `days`, `places`, `spots`, and `prep`; add `travelerGroups` when people have different origins, departures, returns, or transport records, `lodgings` whenever the source mentions hotels/accommodation, and `rentals` whenever a rental order or pickup/return plan exists. Add `tripCalendar` when leave planning or holiday/weekend context matters. Add `budget` when prices exist or the user asks for a total; add weather, tickets, food, driving notes, or photo spots only when source content or the user asks for them.
 
 Before implementation, build a lightweight coverage ledger from the source:
 
@@ -32,6 +33,8 @@ Before implementation, build a lightweight coverage ledger from the source:
 | Scenic/driving road | `drivingNotes` and the relevant day route when used |
 | Lodging screenshot | `lodgings` with verified name, dates, status, price, links, and map point |
 | Flight/rail segment | `flights` or the applicable transport module; link it to `travelerGroups` when travelers differ |
+| Rental order | `rentals` plus public pickup/return `places`, a dedicated map layer, timing checks, and safe price data |
+| Price or paid total | The owning module plus `budget`; label confirmed/estimated and per-person/shared basis |
 | Leave/holiday plan | `tripCalendar` plus explicit span and leave counts |
 
 Mark deliberate exclusions explicitly in working notes. Before finishing, compare the ledger to the rendered modules so no heading or itinerary item disappears through manual selection.
@@ -138,6 +141,15 @@ Add verified booking and pricing fields when available:
 - Prefer exact Trip.com and Booking.com property pages. Omit an unavailable provider. Use exact Ctrip when Trip.com has no matching page. Never construct or guess property URLs.
 - Render verified links in both lodging cards and lodging popups when practical, using `target="_blank"` and `rel="noopener noreferrer"`.
 
+Rental and budget rules:
+
+- Read `module-architecture.md#rental-cars` and `module-architecture.md#budget` before implementing either module.
+- Store pickup and return as separate records with date, time, public store name/location, and a `place` join key. Keep numeric totals separate from formatted currency strings.
+- Compare rental pickup against the inbound arrival and rental return against outbound check-in/departure. Surface negative buffers as conflicts and short positive buffers as warnings; repeat actionable fixes in `prep`.
+- Use the order's final paid total for confirmed spend. Render line items for explanation, but never sum pre-discount charges and then add the paid total again.
+- Classify each budget item by `status` (`confirmed`, `reference`, or `estimated`) and `basis` (`perPerson`, `perVehicle`, `perRoom`, or `perOrder`).
+- When traveler count is unknown, show at least one-person and two-person scenarios if both are useful. State assumptions such as shared room/vehicle, per-person airfare, estimate ranges, and excluded optional costs.
+
 ## Map Defaults
 
 - Map stack contract: Leaflet is the browser rendering framework; Esri supplies the default topographic tiles; OSRM calculates driving routes from OpenStreetMap road data. Do not describe OpenStreetMap as the routing engine, substitute OpenStreetMap tiles for the requested Esri basemap, or spell Esri as `Eris`.
@@ -157,6 +169,7 @@ Add verified booking and pricing fields when available:
 - Group reciprocal flights into one visual corridor when they share the same airport pair, while listing every flight number and direction in the popup. State that the route is illustrative and not a real-time track.
 - Add lodging markers as their own layer (`lodgingLayer` or `hotelLayer`) when hotel coordinates exist. Use a visually distinct marker such as `住`/hotel icon, show them by default, and provide a toggle if the toolbar already has map controls.
 - If adding a lodging list/tab, clicking a lodging card should `setView`/focus the marker and open its popup.
+- Add rental pickup/return markers as their own `rentalLayer`, with visibly distinct `取` and `还` states. A `租车点` toggle must synchronize its `aria-pressed` state; clicking a rental card must restore the layer before fitting both endpoints and opening the pickup popup.
 - Keep layers separate by concept: route, fallback route, labels, places, hotels, airports, restaurants, photo spots, and imported GeoJSON/GPX.
 - Add filters or toggles when there are multiple categories; avoid making every marker identical.
 - Inspect full-route zoom for collisions. Permanent day tooltips can render above hotel or attraction markers; move labels, offset points, cluster markers, or reveal them when focusing a day.
@@ -173,6 +186,8 @@ Add verified booking and pricing fields when available:
 - Itinerary cards: distance badges must be small and must not cover body text.
 - Lodging cards: show city, hotel name, dates/nights, and a short practical note; make badges compact so they do not cover long hotel names.
 - Lodging cards: show booked/reference price state and verified platform links when available. Long names, price pills, and link buttons must wrap without overlap.
+- Rental cards: show vehicle/status, duration, pickup/return details, final paid total, net price breakdown, and connection warning. Verify two or more cards, hidden/restored map layers, collocated airport markers, and one-column mobile schedules.
+- Budget: independently recompute confirmed totals and each traveler scenario. Verify decimals, currency formatting, discounts, shared versus per-person multiplication, ranges, assumptions, exclusions, and narrow-screen stacking.
 - Buttons and links: confirm all controls use intentional project styles. A browser-default button means visual validation failed.
 - Section tabs: use a clearly bounded segmented surface, visible inactive states, and a high-contrast active state with a second cue such as an underline or accent bar. Verify sticky positioning does not cover content.
 - Emoji tabs: use one meaningful emoji plus a text label, set the emoji `aria-hidden="true"`, and avoid mixing emoji with numeric prefixes when space is tight. Never use emoji alone as the accessible label.
@@ -188,7 +203,13 @@ Add verified booking and pricing fields when available:
 
 ## GitHub Pages Workflow
 
-1. `gh auth status`; if invalid, ask user to authorize `gh auth login`.
+1. Diagnose GitHub authentication without exposing credentials:
+   - Run `gh auth status`.
+   - If it names an invalid `GH_TOKEN` or `GITHUB_TOKEN`, retry with `env -u GH_TOKEN -u GITHUB_TOKEN gh auth status`; environment tokens override stored `gh` credentials. Never print token values or dump the environment.
+   - Run `git ls-remote origin HEAD` only to verify remote reachability and read access; a public repository may allow this anonymously, so it does not prove push authorization.
+   - With the intended branch resolved explicitly, use `git push --dry-run origin <branch>` to test the Git push path without sending updates. This exercises Git's separate credential source but does not guarantee that every branch-protection rule will accept the real push.
+   - Require a valid `gh` login only for `gh`/API operations such as creating or configuring Pages. For an existing Pages site, a working Git push channel is sufficient; after the authorized real push, monitor the public Actions API and verify the public URLs.
+   - If the required channel still fails, obtain informed approval before running `gh auth login` or modifying persistent credentials.
 2. Create repo if needed:
    ```bash
    gh repo create <owner>/travel-guides --public --description "Interactive travel guide collection with maps and itineraries"
@@ -201,7 +222,7 @@ Add verified booking and pricing fields when available:
    git commit -m "Add <trip name> travel guide"
    git push -u origin main
    ```
-   If the staged update newly exposes exact personal leave/work dates, stop before `git push`, enumerate those dates, and obtain explicit informed confirmation for public disclosure.
+   If the staged update newly exposes exact personal leave/work dates, rental pickup/return times, or personal spending totals, stop before `git push`, enumerate the sensitive fields, and obtain explicit informed confirmation for public disclosure.
 4. Enable Pages:
    ```bash
    gh api --method POST repos/<owner>/travel-guides/pages -f 'source[branch]=main' -f 'source[path]=/'
